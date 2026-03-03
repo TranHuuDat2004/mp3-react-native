@@ -2,6 +2,7 @@ import { Image } from 'expo-image';
 import { StyleSheet, TouchableOpacity, View, ScrollView, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useState, useMemo } from 'react';
+import { useRouter } from 'expo-router';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -11,6 +12,8 @@ import musicData from '@/assets/data/music.json';
 export default function LibraryScreen() {
   const [activeFilter, setActiveFilter] = useState<'Playlists' | 'Artists' | 'Albums'>('Playlists');
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const router = useRouter();
 
   const categories = useMemo(() => musicData.map(category => ({
     id: category.id,
@@ -20,23 +23,23 @@ export default function LibraryScreen() {
     songs: category.songs
   })), []);
 
+  const allSongs = useMemo(() => musicData.flatMap(category => category.songs), []);
+
   const uniqueArtists = useMemo(() => {
     const artistMap = new Map();
-    musicData.forEach(cat => {
-      cat.songs.forEach(song => {
-        if (!artistMap.has(song.artistData)) {
-          artistMap.set(song.artistData, {
-            name: song.artistData,
-            art: song.artUrl,
-            count: 1
-          });
-        } else {
-          artistMap.get(song.artistData).count++;
-        }
-      });
+    allSongs.forEach(song => {
+      if (!artistMap.has(song.artistData)) {
+        artistMap.set(song.artistData, {
+          name: song.artistData,
+          art: song.artUrl,
+          count: 1
+        });
+      } else {
+        artistMap.get(song.artistData).count++;
+      }
     });
     return Array.from(artistMap.values()).sort((a, b) => b.count - a.count);
-  }, []);
+  }, [allSongs]);
 
   const activeCategory = useMemo(() =>
     categories.find(c => c.id === selectedCategoryId),
@@ -62,7 +65,52 @@ export default function LibraryScreen() {
     </View>
   );
 
+  const renderSearchContent = () => {
+    const query = searchQuery.toLowerCase();
+    const filteredSongs = allSongs.filter(song =>
+      song.title.toLowerCase().includes(query) ||
+      song.artistData.toLowerCase().includes(query)
+    );
+
+    if (filteredSongs.length === 0) {
+      return (
+        <View style={styles.section}>
+          <ThemedText style={{ textAlign: 'center', color: '#888', marginTop: 20 }}>No results found for "{searchQuery}"</ThemedText>
+        </View>
+      );
+    }
+
+    return (
+      <View style={styles.section}>
+        <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>Search Results</ThemedText>
+        {filteredSongs.map((item: any, idx: number) => (
+          <TouchableOpacity
+            key={`${item.id}-${idx}`}
+            style={styles.libraryItem}
+            onPress={() => {
+              const songIdx = allSongs.findIndex((s: any) => s.id === item.id);
+              if (songIdx !== -1) {
+                router.push(`/?songIndex=${songIdx}`);
+              }
+            }}
+          >
+            <Image source={AssetMap[item.artUrl]} style={styles.libraryArt} />
+            <View style={styles.libraryItemInfo}>
+              <ThemedText type="defaultSemiBold" numberOfLines={1}>{item.title}</ThemedText>
+              <ThemedText style={styles.librarySubtitle}>{item.artistData} • {item.plays} plays</ThemedText>
+            </View>
+            <Ionicons name="play-circle" size={24} color="#007AFF" />
+          </TouchableOpacity>
+        ))}
+      </View>
+    );
+  };
+
   const renderContent = () => {
+    if (searchQuery.trim().length > 0) {
+      return renderSearchContent();
+    }
+
     if (selectedCategoryId && activeCategory) {
       return (
         <View style={styles.section}>
@@ -72,7 +120,16 @@ export default function LibraryScreen() {
           </TouchableOpacity>
           <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>{activeCategory.title}</ThemedText>
           {activeCategory.songs.map((item: any) => (
-            <TouchableOpacity key={item.id} style={styles.libraryItem}>
+            <TouchableOpacity
+              key={item.id}
+              style={styles.libraryItem}
+              onPress={() => {
+                const idx = allSongs.findIndex((s: any) => s.id === item.id);
+                if (idx !== -1) {
+                  router.push(`/?songIndex=${idx}`);
+                }
+              }}
+            >
               <Image source={AssetMap[item.artUrl]} style={styles.libraryArt} />
               <View style={styles.libraryItemInfo}>
                 <ThemedText type="defaultSemiBold" numberOfLines={1}>{item.title}</ThemedText>
@@ -112,7 +169,7 @@ export default function LibraryScreen() {
       return (
         <View style={styles.section}>
           <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>Artists</ThemedText>
-          {uniqueArtists.map((item, idx) => (
+          {uniqueArtists.map((item: any, idx) => (
             <TouchableOpacity key={idx} style={styles.libraryItem}>
               <Image source={AssetMap[item.art]} style={[styles.libraryArt, { borderRadius: 32 }]} />
               <View style={styles.libraryItemInfo}>
@@ -140,6 +197,22 @@ export default function LibraryScreen() {
           </TouchableOpacity>
         </View>
       </ThemedView>
+
+      <View style={styles.searchContainer}>
+        <Ionicons name="search" size={20} color="#888" style={styles.searchIcon} />
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search songs, artists..."
+          placeholderTextColor="#888"
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+        />
+        {searchQuery.length > 0 && (
+          <TouchableOpacity onPress={() => setSearchQuery('')}>
+            <Ionicons name="close-circle" size={20} color="#888" />
+          </TouchableOpacity>
+        )}
+      </View>
 
       {renderFilterChips()}
       {renderContent()}
@@ -170,6 +243,23 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     padding: 4,
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f0f0f0',
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    marginBottom: 24,
+  },
+  searchIcon: {
+    marginRight: 8,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 16,
+    color: '#000',
   },
   filterSection: {
     flexDirection: 'row',

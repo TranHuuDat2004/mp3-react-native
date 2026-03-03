@@ -2,7 +2,9 @@ import { Image } from 'expo-image';
 import { StyleSheet, TouchableOpacity, View, ScrollView, Dimensions, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState, useRef } from 'react';
-import { Audio } from 'expo-av';
+import { Audio, InterruptionModeAndroid, InterruptionModeIOS } from 'expo-av';
+import Slider from '@react-native-community/slider';
+import { useLocalSearchParams } from 'expo-router';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -15,15 +17,73 @@ const { width } = Dimensions.get('window');
 const allSongs = musicData.flatMap(category => category.songs);
 
 export default function MusicPlayerScreen() {
+  const params = useLocalSearchParams();
   const [songIndex, setSongIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackStatus, setPlaybackStatus] = useState<any>(null);
   const [sound, setSound] = useState<Audio.Sound | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSeeking, setIsSeeking] = useState(false);
+
+  // We use a ref to always have the latest sound object in our effect
+  const soundRef = useRef(sound);
+  useEffect(() => {
+    soundRef.current = sound;
+  }, [sound]);
 
   const currentSong = allSongs[songIndex];
 
   useEffect(() => {
+    if (params.songIndex !== undefined && !Array.isArray(params.songIndex)) {
+      const idx = Number(params.songIndex);
+      if (!isNaN(idx) && idx >= 0 && idx < allSongs.length) {
+        setSongIndex(idx);
+        loadAndPlayWithCurrentSound(idx, true);
+      }
+    }
+  }, [params.songIndex]);
+
+  // Helper inside effect scope to use the ref to prevent stale closures that duplicate audio
+  async function loadAndPlayWithCurrentSound(index: number, shouldPlay = true) {
+    if (soundRef.current) {
+      await soundRef.current.unloadAsync();
+    }
+
+    setIsLoading(true);
+    const song = allSongs[index];
+    const source = AssetMap[song.audioSrc];
+
+    if (!source) {
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const { sound: newSound } = await Audio.Sound.createAsync(
+        source,
+        { shouldPlay },
+        onPlaybackStatusUpdate
+      );
+      setSound(newSound);
+      setIsPlaying(shouldPlay);
+    } catch (error) {
+      console.error("Error loading sound", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    // Configure background audio mode
+    Audio.setAudioModeAsync({
+      staysActiveInBackground: true,
+      interruptionModeAndroid: InterruptionModeAndroid.DuckOthers,
+      shouldDuckAndroid: true,
+      playThroughEarpieceAndroid: false,
+      interruptionModeIOS: InterruptionModeIOS.DoNotMix,
+      playsInSilentModeIOS: true,
+    });
+
     return () => {
       if (sound) {
         sound.unloadAsync();
@@ -39,6 +99,12 @@ export default function MusicPlayerScreen() {
     setIsLoading(true);
     const song = allSongs[index];
     const source = AssetMap[song.audioSrc];
+
+    if (!source) {
+      console.warn(`Asset not found for ${song.title}: ${song.audioSrc}`);
+      setIsLoading(false);
+      return;
+    }
 
     try {
       const { sound: newSound } = await Audio.Sound.createAsync(
@@ -57,7 +123,9 @@ export default function MusicPlayerScreen() {
 
   const onPlaybackStatusUpdate = (status: any) => {
     if (status.isLoaded) {
-      setPlaybackStatus(status);
+      if (!isSeeking) {
+        setPlaybackStatus(status);
+      }
       if (status.didJustFinish) {
         handleNext();
       }
@@ -91,11 +159,15 @@ export default function MusicPlayerScreen() {
     await loadAndPlay(prevIndex);
   };
 
-  const getProgress = () => {
-    if (playbackStatus?.durationMillis > 0) {
-      return (playbackStatus.positionMillis / playbackStatus.durationMillis) * 100;
+  const onSlidingComplete = async (value: number) => {
+    if (sound) {
+      await sound.setPositionAsync(value);
     }
-    return 0;
+    setIsSeeking(false);
+  };
+
+  const onSlidingStart = () => {
+    setIsSeeking(true);
   };
 
   const formatTime = (millis: number) => {
@@ -128,10 +200,17 @@ export default function MusicPlayerScreen() {
       </View>
 
       <View style={styles.progressSection}>
-        <View style={styles.progressBarBg}>
-          <View style={[styles.progressBarFill, { width: `${getProgress()}%` }]} />
-          <View style={[styles.progressMarker, { left: `${getProgress()}%` }]} />
-        </View>
+        <Slider
+          style={styles.slider}
+          minimumValue={0}
+          maximumValue={playbackStatus?.durationMillis || 1}
+          value={playbackStatus?.positionMillis || 0}
+          minimumTrackTintColor="#007AFF"
+          maximumTrackTintColor="#eee"
+          thumbTintColor="#007AFF"
+          onSlidingStart={onSlidingStart}
+          onSlidingComplete={onSlidingComplete}
+        />
         <View style={styles.timeInfo}>
           <ThemedText style={styles.timeText}>{formatTime(playbackStatus?.positionMillis)}</ThemedText>
           <ThemedText style={styles.timeText}>{formatTime(playbackStatus?.durationMillis)}</ThemedText>
@@ -235,31 +314,14 @@ const styles = StyleSheet.create({
   progressSection: {
     marginBottom: 40,
   },
-  progressBarBg: {
-    height: 4,
-    backgroundColor: '#eee',
-    borderRadius: 2,
-    flexDirection: 'row',
-    alignItems: 'center',
-    position: 'relative',
-  },
-  progressBarFill: {
-    height: '100%',
-    backgroundColor: '#007AFF',
-    borderRadius: 2,
-  },
-  progressMarker: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    backgroundColor: '#007AFF',
-    position: 'absolute',
-    marginLeft: -6,
+  slider: {
+    width: '100%',
+    height: 40,
   },
   timeInfo: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 12,
+    marginTop: -8,
   },
   timeText: {
     fontSize: 12,
