@@ -2,7 +2,7 @@
   "expo": {
     "name": "MyMusicPlayer",
     "slug": "my-app",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/cyberpunk-icon.png",
     "scheme": "myapp",

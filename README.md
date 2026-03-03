@@ -1,50 +1,52 @@
-# Welcome to your Expo app 👋
+# 🎧 MyMusicPlayer v1.1.0
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+**MyMusicPlayer** là một trình phát nhạc Offline hiện đại được xây dựng bằng React Native và Expo. Với phong cách thiết kế **Cyberpunk Neon**, ứng dụng mang lại trải nghiệm nghe nhạc độc đáo, mượt mà và hoàn toàn không cần kết nối Internet.
 
-## Get started
+## ✨ Tính năng nổi bật
 
-1. Install dependencies
+- 🦾 **Thiết kế Cyberpunk**: Giao diện tối với các điểm nhấn Neon Pink & Cyan.
+- 📂 **Offline 100%**: Hoàn toàn không cần Database hay Internet. Nhạc và ảnh được đóng gói sẵn trong App.
+- 🔍 **Tìm kiếm thông minh**: Thanh tìm kiếm tích hợp giúp tìm bài hát hoặc nghệ sĩ trong chớp mắt.
+- 🎧 **Phát nhạc dưới nền**: Nhạc vẫn tiếp tục phát khi bạn thoát App hoặc tắt màn hình.
+- ⏩ **Tua nhạc mượt mà**: Hỗ trợ thanh slider để tua đến bất kỳ đoạn nhạc nào bạn thích.
+- 📚 **Thư viện chuyên nghiệp**: Tự động lọc nhạc theo Playlist, Nghệ sĩ và Album.
 
+## 🛠 Công nghệ sử dụng
+
+- **Framework**: Expo (React Native)
+- **Âm thanh**: Expo-AV (Hỗ trợ Audio Sessions & Background Mode)
+- **Định tuyến**: Expo-Router (File-based routing)
+- **UI**: Themed Components, Ionicons, Expo-Image.
+
+## 🚀 Bắt đầu
+
+### Cài đặt
+1. Clone dự án và truy cập vào thư mục:
+   ```bash
+   cd my-app
+   ```
+2. Cài đặt các thư viện:
    ```bash
    npm install
    ```
 
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
+### Chạy ứng dụng
+Khởi động Expo Go:
 ```bash
-npm run reset-project
+npx expo start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### Đóng gói APK
+Để tự đóng gói bản APK cài đặt cho Android:
+1. Đảm bảo đã cài đặt `eas-cli`: `npm install -g eas-cli`
+2. Đăng nhập: `eas login`
+3. Chạy lệnh build:
+   ```bash
+   npx eas build -p android --profile preview
+   ```
 
-## Learn more
+## 📝 Nhật ký phát hành
+Xem chi tiết các thay đổi và cập nhật tại: [RELEASE_NOTES.md](./RELEASE_NOTES.md)
 
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+---
+*Phát triển bởi huudatlego với sự hỗ trợ từ Antigravity AI.*
