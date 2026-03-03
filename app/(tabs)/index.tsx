@@ -1,13 +1,111 @@
 import { Image } from 'expo-image';
-import { StyleSheet, TouchableOpacity, View, ScrollView, Dimensions } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, ScrollView, Dimensions, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useEffect, useState, useRef } from 'react';
+import { Audio } from 'expo-av';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { AssetMap } from '@/constants/assets-map';
+import musicData from '@/assets/data/music.json';
 
 const { width } = Dimensions.get('window');
 
+// Flatten songs from categories
+const allSongs = musicData.flatMap(category => category.songs);
+
 export default function MusicPlayerScreen() {
+  const [songIndex, setSongIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [playbackStatus, setPlaybackStatus] = useState<any>(null);
+  const [sound, setSound] = useState<Audio.Sound | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const currentSong = allSongs[songIndex];
+
+  useEffect(() => {
+    return () => {
+      if (sound) {
+        sound.unloadAsync();
+      }
+    };
+  }, [sound]);
+
+  async function loadAndPlay(index: number, shouldPlay = true) {
+    if (sound) {
+      await sound.unloadAsync();
+    }
+
+    setIsLoading(true);
+    const song = allSongs[index];
+    const source = AssetMap[song.audioSrc];
+
+    try {
+      const { sound: newSound } = await Audio.Sound.createAsync(
+        source,
+        { shouldPlay },
+        onPlaybackStatusUpdate
+      );
+      setSound(newSound);
+      setIsPlaying(shouldPlay);
+    } catch (error) {
+      console.error("Error loading sound", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  const onPlaybackStatusUpdate = (status: any) => {
+    if (status.isLoaded) {
+      setPlaybackStatus(status);
+      if (status.didJustFinish) {
+        handleNext();
+      }
+    }
+  };
+
+  const handlePlayPause = async () => {
+    if (!sound) {
+      await loadAndPlay(songIndex);
+      return;
+    }
+
+    if (isPlaying) {
+      await sound.pauseAsync();
+      setIsPlaying(false);
+    } else {
+      await sound.playAsync();
+      setIsPlaying(true);
+    }
+  };
+
+  const handleNext = async () => {
+    const nextIndex = (songIndex + 1) % allSongs.length;
+    setSongIndex(nextIndex);
+    await loadAndPlay(nextIndex);
+  };
+
+  const handleBack = async () => {
+    const prevIndex = (songIndex - 1 + allSongs.length) % allSongs.length;
+    setSongIndex(prevIndex);
+    await loadAndPlay(prevIndex);
+  };
+
+  const getProgress = () => {
+    if (playbackStatus?.durationMillis > 0) {
+      return (playbackStatus.positionMillis / playbackStatus.durationMillis) * 100;
+    }
+    return 0;
+  };
+
+  const formatTime = (millis: number) => {
+    if (!millis) return "0:00";
+    const totalSeconds = millis / 1000;
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = Math.floor(totalSeconds % 60);
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  };
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <ThemedView style={styles.header}>
@@ -19,24 +117,24 @@ export default function MusicPlayerScreen() {
 
       <View style={styles.albumArtContainer}>
         <Image
-          source="https://picsum.photos/seed/music/600/600"
+          source={AssetMap[currentSong.artUrl] || "https://picsum.photos/seed/music/600/600"}
           style={styles.albumArt}
         />
       </View>
 
       <View style={styles.songInfo}>
-        <ThemedText type="title">Midnight City</ThemedText>
-        <ThemedText style={styles.artist}>M83 - Hurry Up, We're Dreaming</ThemedText>
+        <ThemedText type="title" numberOfLines={1}>{currentSong.title}</ThemedText>
+        <ThemedText style={styles.artist}>{currentSong.artistData}</ThemedText>
       </View>
 
       <View style={styles.progressSection}>
         <View style={styles.progressBarBg}>
-          <View style={[styles.progressBarFill, { width: '45%' }]} />
-          <View style={styles.progressMarker} />
+          <View style={[styles.progressBarFill, { width: `${getProgress()}%` }]} />
+          <View style={[styles.progressMarker, { left: `${getProgress()}%` }]} />
         </View>
         <View style={styles.timeInfo}>
-          <ThemedText style={styles.timeText}>1:45</ThemedText>
-          <ThemedText style={styles.timeText}>4:03</ThemedText>
+          <ThemedText style={styles.timeText}>{formatTime(playbackStatus?.positionMillis)}</ThemedText>
+          <ThemedText style={styles.timeText}>{formatTime(playbackStatus?.durationMillis)}</ThemedText>
         </View>
       </View>
 
@@ -44,13 +142,17 @@ export default function MusicPlayerScreen() {
         <TouchableOpacity>
           <Ionicons name="shuffle" size={28} color="#888" />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleBack}>
           <Ionicons name="play-back" size={36} color="#000" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.playButton}>
-          <Ionicons name="play" size={40} color="#fff" />
+        <TouchableOpacity style={styles.playButton} onPress={handlePlayPause}>
+          {isLoading ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Ionicons name={isPlaying ? "pause" : "play"} size={40} color="#fff" />
+          )}
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleNext}>
           <Ionicons name="play-forward" size={36} color="#000" />
         </TouchableOpacity>
         <TouchableOpacity>
@@ -60,15 +162,25 @@ export default function MusicPlayerScreen() {
 
       <View style={styles.footer}>
         <ThemedText type="defaultSemiBold" style={styles.footerTitle}>Up Next</ThemedText>
-        {[1, 2, 3].map((item) => (
-          <TouchableOpacity key={item} style={styles.nextSongItem}>
+        {[allSongs[(songIndex + 1) % allSongs.length], allSongs[(songIndex + 2) % allSongs.length]].map((item, i) => (
+          <TouchableOpacity
+            key={item.id + i}
+            style={styles.nextSongItem}
+            onPress={() => {
+              const idx = allSongs.findIndex(s => s.id === item.id);
+              if (idx !== -1) {
+                setSongIndex(idx);
+                loadAndPlay(idx);
+              }
+            }}
+          >
             <Image
-              source={`https://picsum.photos/seed/${item + 10}/100/100`}
+              source={AssetMap[item.artUrl]}
               style={styles.nextSongArt}
             />
             <View style={styles.nextSongInfo}>
-              <ThemedText type="defaultSemiBold">Future Focus {item}</ThemedText>
-              <ThemedText style={styles.nextSongArtist}>Artist {item}</ThemedText>
+              <ThemedText type="defaultSemiBold" numberOfLines={1}>{item.title}</ThemedText>
+              <ThemedText style={styles.nextSongArtist}>{item.artistData}</ThemedText>
             </View>
             <Ionicons name="chevron-forward" size={20} color="#ccc" />
           </TouchableOpacity>
@@ -118,6 +230,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#888',
     marginTop: 8,
+    textAlign: 'center',
   },
   progressSection: {
     marginBottom: 40,
@@ -128,6 +241,7 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     flexDirection: 'row',
     alignItems: 'center',
+    position: 'relative',
   },
   progressBarFill: {
     height: '100%',
@@ -139,6 +253,7 @@ const styles = StyleSheet.create({
     height: 12,
     borderRadius: 6,
     backgroundColor: '#007AFF',
+    position: 'absolute',
     marginLeft: -6,
   },
   timeInfo: {

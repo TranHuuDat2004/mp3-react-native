@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, View, Text, KeyboardAvoidingView, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 
@@ -11,99 +12,139 @@ export default function SignupScreen() {
     const router = useRouter();
 
     const handleSignup = () => {
-        // Implement signup logic here
-        console.log('Signup with:', name, email, password);
         router.replace('/(tabs)');
     };
 
     return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={styles.container}
-        >
-            <ThemedView style={styles.inner}>
+        <ThemedView style={styles.container}>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                style={styles.inner}
+            >
+                <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+                    <Ionicons name="chevron-back" size={28} color="#000" />
+                </TouchableOpacity>
+
                 <View style={styles.header}>
-                    <ThemedText type="title">Create Account</ThemedText>
-                    <ThemedText style={styles.subtitle}>Join us and get started!</ThemedText>
+                    <ThemedText type="title" style={styles.title}>Join MusicStream</ThemedText>
+                    <ThemedText style={styles.subtitle}>Discover millions of songs today!</ThemedText>
                 </View>
 
                 <View style={styles.form}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Full Name"
-                        placeholderTextColor="#888"
-                        value={name}
-                        onChangeText={setName}
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Email"
-                        placeholderTextColor="#888"
-                        value={email}
-                        onChangeText={setEmail}
-                        autoCapitalize="none"
-                        keyboardType="email-address"
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Password"
-                        placeholderTextColor="#888"
-                        value={password}
-                        onChangeText={setPassword}
-                        secureTextEntry
-                    />
+                    <View style={styles.inputContainer}>
+                        <Ionicons name="person-outline" size={20} color="#888" style={styles.inputIcon} />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Full Name"
+                            placeholderTextColor="#888"
+                            value={name}
+                            onChangeText={setName}
+                        />
+                    </View>
+
+                    <View style={styles.inputContainer}>
+                        <Ionicons name="mail-outline" size={20} color="#888" style={styles.inputIcon} />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Email"
+                            placeholderTextColor="#888"
+                            value={email}
+                            onChangeText={setEmail}
+                            autoCapitalize="none"
+                            keyboardType="email-address"
+                        />
+                    </View>
+
+                    <View style={styles.inputContainer}>
+                        <Ionicons name="lock-closed-outline" size={20} color="#888" style={styles.inputIcon} />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Password"
+                            placeholderTextColor="#888"
+                            value={password}
+                            onChangeText={setPassword}
+                            secureTextEntry
+                        />
+                    </View>
 
                     <TouchableOpacity style={styles.button} onPress={handleSignup}>
-                        <Text style={styles.buttonText}>Sign Up</Text>
+                        <Text style={styles.buttonText}>Create Account</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
                         style={styles.link}
                         onPress={() => router.back()}
                     >
-                        <ThemedText>Already have an account? <Text style={styles.linkText}>Login</Text></ThemedText>
+                        <ThemedText>Already have an account? <Text style={styles.linkText}>Log In</Text></ThemedText>
                     </TouchableOpacity>
                 </View>
-            </ThemedView>
-        </KeyboardAvoidingView>
+            </KeyboardAvoidingView>
+        </ThemedView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#fff',
     },
     inner: {
         flex: 1,
-        padding: 24,
+        padding: 32,
         justifyContent: 'center',
+    },
+    backButton: {
+        position: 'absolute',
+        top: 60,
+        left: 20,
+        zIndex: 10,
     },
     header: {
         marginBottom: 48,
     },
+    title: {
+        fontSize: 28,
+        fontWeight: 'bold',
+    },
     subtitle: {
+        fontSize: 16,
+        color: '#888',
         marginTop: 8,
-        opacity: 0.6,
     },
     form: {
         gap: 16,
     },
-    input: {
+    inputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
         height: 56,
-        backgroundColor: '#f5f5f5',
-        borderRadius: 12,
+        backgroundColor: '#f8f8f8',
+        borderRadius: 16,
         paddingHorizontal: 16,
-        fontSize: 16,
         borderWidth: 1,
-        borderColor: '#e0e0e0',
+        borderColor: '#eee',
+    },
+    inputIcon: {
+        marginRight: 12,
+    },
+    input: {
+        flex: 1,
+        height: '100%',
+        fontSize: 16,
+        color: '#000',
     },
     button: {
         height: 56,
         backgroundColor: '#007AFF',
-        borderRadius: 12,
+        borderRadius: 16,
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 8,
+        elevation: 4,
+        shadowColor: '#007AFF',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 6,
     },
     buttonText: {
         color: '#fff',
@@ -112,7 +153,7 @@ const styles = StyleSheet.create({
     },
     link: {
         alignItems: 'center',
-        marginTop: 16,
+        marginTop: 24,
     },
     linkText: {
         color: '#007AFF',

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, View, Text, KeyboardAvoidingView, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
-import { HelloWave } from '@/components/hello-wave';
+import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 
@@ -11,43 +11,51 @@ export default function LoginScreen() {
     const router = useRouter();
 
     const handleLogin = () => {
-        // Implement login logic here
-        console.log('Login with:', email, password);
         router.replace('/(tabs)');
     };
 
     return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={styles.container}
-        >
-            <ThemedView style={styles.inner}>
+        <ThemedView style={styles.container}>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                style={styles.inner}
+            >
                 <View style={styles.header}>
-                    <HelloWave />
-                    <ThemedText type="title" style={styles.title}>Welcome Back!</ThemedText>
+                    <View style={styles.logoContainer}>
+                        <Ionicons name="musical-notes" size={48} color="#fff" />
+                    </View>
+                    <ThemedText type="title" style={styles.title}>MusicStream</ThemedText>
+                    <ThemedText style={styles.subtitle}>Log in to your account</ThemedText>
                 </View>
 
                 <View style={styles.form}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Email"
-                        placeholderTextColor="#888"
-                        value={email}
-                        onChangeText={setEmail}
-                        autoCapitalize="none"
-                        keyboardType="email-address"
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Password"
-                        placeholderTextColor="#888"
-                        value={password}
-                        onChangeText={setPassword}
-                        secureTextEntry
-                    />
+                    <View style={styles.inputContainer}>
+                        <Ionicons name="mail-outline" size={20} color="#888" style={styles.inputIcon} />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Email"
+                            placeholderTextColor="#888"
+                            value={email}
+                            onChangeText={setEmail}
+                            autoCapitalize="none"
+                            keyboardType="email-address"
+                        />
+                    </View>
+
+                    <View style={styles.inputContainer}>
+                        <Ionicons name="lock-closed-outline" size={20} color="#888" style={styles.inputIcon} />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Password"
+                            placeholderTextColor="#888"
+                            value={password}
+                            onChangeText={setPassword}
+                            secureTextEntry
+                        />
+                    </View>
 
                     <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                        <Text style={styles.buttonText}>Login</Text>
+                        <Text style={styles.buttonText}>Log In</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -57,46 +65,82 @@ export default function LoginScreen() {
                         <ThemedText>Don't have an account? <Text style={styles.linkText}>Sign Up</Text></ThemedText>
                     </TouchableOpacity>
                 </View>
-            </ThemedView>
-        </KeyboardAvoidingView>
+            </KeyboardAvoidingView>
+        </ThemedView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#fff',
     },
     inner: {
         flex: 1,
-        padding: 24,
+        padding: 32,
         justifyContent: 'center',
     },
     header: {
         alignItems: 'center',
         marginBottom: 48,
     },
+    logoContainer: {
+        width: 80,
+        height: 80,
+        backgroundColor: '#007AFF',
+        borderRadius: 24,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 16,
+        elevation: 8,
+        shadowColor: '#007AFF',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 8,
+    },
     title: {
-        marginTop: 16,
+        fontSize: 28,
+        fontWeight: 'bold',
+    },
+    subtitle: {
+        fontSize: 16,
+        color: '#888',
+        marginTop: 4,
     },
     form: {
         gap: 16,
     },
-    input: {
+    inputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
         height: 56,
-        backgroundColor: '#f5f5f5',
-        borderRadius: 12,
+        backgroundColor: '#f8f8f8',
+        borderRadius: 16,
         paddingHorizontal: 16,
-        fontSize: 16,
         borderWidth: 1,
-        borderColor: '#e0e0e0',
+        borderColor: '#eee',
+    },
+    inputIcon: {
+        marginRight: 12,
+    },
+    input: {
+        flex: 1,
+        height: '100%',
+        fontSize: 16,
+        color: '#000',
     },
     button: {
         height: 56,
         backgroundColor: '#007AFF',
-        borderRadius: 12,
+        borderRadius: 16,
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 8,
+        elevation: 4,
+        shadowColor: '#007AFF',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 6,
     },
     buttonText: {
         color: '#fff',
@@ -105,7 +149,7 @@ const styles = StyleSheet.create({
     },
     link: {
         alignItems: 'center',
-        marginTop: 16,
+        marginTop: 24,
     },
     linkText: {
         color: '#007AFF',

@@ -1,112 +1,260 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, ScrollView, TextInput } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { useState, useMemo } from 'react';
 
-import { Collapsible } from '@/components/ui/collapsible';
-import { ExternalLink } from '@/components/external-link';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Fonts } from '@/constants/theme';
+import { AssetMap } from '@/constants/assets-map';
+import musicData from '@/assets/data/music.json';
 
-export default function TabTwoScreen() {
+export default function LibraryScreen() {
+  const [activeFilter, setActiveFilter] = useState<'Playlists' | 'Artists' | 'Albums'>('Playlists');
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
+
+  const categories = useMemo(() => musicData.map(category => ({
+    id: category.id,
+    title: category.title,
+    art: category.songs[0]?.artUrl,
+    count: category.songs.length,
+    songs: category.songs
+  })), []);
+
+  const uniqueArtists = useMemo(() => {
+    const artistMap = new Map();
+    musicData.forEach(cat => {
+      cat.songs.forEach(song => {
+        if (!artistMap.has(song.artistData)) {
+          artistMap.set(song.artistData, {
+            name: song.artistData,
+            art: song.artUrl,
+            count: 1
+          });
+        } else {
+          artistMap.get(song.artistData).count++;
+        }
+      });
+    });
+    return Array.from(artistMap.values()).sort((a, b) => b.count - a.count);
+  }, []);
+
+  const activeCategory = useMemo(() =>
+    categories.find(c => c.id === selectedCategoryId),
+    [categories, selectedCategoryId]
+  );
+
+  const renderFilterChips = () => (
+    <View style={styles.filterSection}>
+      {(['Playlists', 'Artists', 'Albums'] as const).map(filter => (
+        <TouchableOpacity
+          key={filter}
+          style={activeFilter === filter ? styles.filterChipActive : styles.filterChip}
+          onPress={() => {
+            setActiveFilter(filter);
+            setSelectedCategoryId(null);
+          }}
+        >
+          <ThemedText style={activeFilter === filter ? styles.filterTextActive : styles.filterText}>
+            {filter}
+          </ThemedText>
+        </TouchableOpacity>
+      ))}
+    </View>
+  );
+
+  const renderContent = () => {
+    if (selectedCategoryId && activeCategory) {
+      return (
+        <View style={styles.section}>
+          <TouchableOpacity style={styles.backButton} onPress={() => setSelectedCategoryId(null)}>
+            <Ionicons name="arrow-back" size={20} color="#007AFF" />
+            <ThemedText style={styles.backText}>Back to {activeFilter}</ThemedText>
+          </TouchableOpacity>
+          <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>{activeCategory.title}</ThemedText>
+          {activeCategory.songs.map((item: any) => (
+            <TouchableOpacity key={item.id} style={styles.libraryItem}>
+              <Image source={AssetMap[item.artUrl]} style={styles.libraryArt} />
+              <View style={styles.libraryItemInfo}>
+                <ThemedText type="defaultSemiBold" numberOfLines={1}>{item.title}</ThemedText>
+                <ThemedText style={styles.librarySubtitle}>{item.artistData} • {item.plays} plays</ThemedText>
+              </View>
+              <Ionicons name="play-circle" size={24} color="#007AFF" />
+            </TouchableOpacity>
+          ))}
+        </View>
+      );
+    }
+
+    if (activeFilter === 'Playlists' || activeFilter === 'Albums') {
+      return (
+        <View style={styles.section}>
+          <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>
+            {activeFilter === 'Playlists' ? 'Your Playlists' : 'Albums'}
+          </ThemedText>
+          <View style={styles.grid}>
+            {categories.map((item) => (
+              <TouchableOpacity
+                key={item.id}
+                style={styles.gridItem}
+                onPress={() => setSelectedCategoryId(item.id)}
+              >
+                <Image source={AssetMap[item.art]} style={styles.gridArt} />
+                <ThemedText numberOfLines={1} style={styles.gridTitle}>{item.title}</ThemedText>
+                <ThemedText style={styles.gridSubtitle}>{item.count} songs</ThemedText>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+      );
+    }
+
+    if (activeFilter === 'Artists') {
+      return (
+        <View style={styles.section}>
+          <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>Artists</ThemedText>
+          {uniqueArtists.map((item, idx) => (
+            <TouchableOpacity key={idx} style={styles.libraryItem}>
+              <Image source={AssetMap[item.art]} style={[styles.libraryArt, { borderRadius: 32 }]} />
+              <View style={styles.libraryItemInfo}>
+                <ThemedText type="defaultSemiBold" numberOfLines={1}>{item.name}</ThemedText>
+                <ThemedText style={styles.librarySubtitle}>{item.count} songs in library</ThemedText>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color="#ccc" />
+            </TouchableOpacity>
+          ))}
+        </View>
+      );
+    }
+  };
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
-      headerImage={
-        <IconSymbol
-          size={310}
-          color="#808080"
-          name="chevron.left.forwardslash.chevron.right"
-          style={styles.headerImage}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText
-          type="title"
-          style={{
-            fontFamily: Fonts.rounded,
-          }}>
-          Explore
-        </ThemedText>
+    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+      <ThemedView style={styles.header}>
+        <ThemedText type="title">Your Library</ThemedText>
+        <View style={styles.headerIcons}>
+          <TouchableOpacity style={styles.iconButton}>
+            <Ionicons name="search" size={24} color="#000" />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.iconButton}>
+            <Ionicons name="add" size={30} color="#000" />
+          </TouchableOpacity>
+        </View>
       </ThemedView>
-      <ThemedText>This app includes example code to help you get started.</ThemedText>
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
-        </ThemedText>
-        <ThemedText>
-          The layout file in <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{' '}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the web version, press{' '}
-          <ThemedText type="defaultSemiBold">w</ThemedText> in the terminal running this project.
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Images">
-        <ThemedText>
-          For static images, you can use the <ThemedText type="defaultSemiBold">@2x</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to provide files for
-          different screen densities
-        </ThemedText>
-        <Image
-          source={require('@/assets/images/react-logo.png')}
-          style={{ width: 100, height: 100, alignSelf: 'center' }}
-        />
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <ThemedText>
-          This template has light and dark mode support. The{' '}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook lets you inspect
-          what the user&apos;s current color scheme is, and so you can adjust UI colors accordingly.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Animations">
-        <ThemedText>
-          This template includes an example of an animated component. The{' '}
-          <ThemedText type="defaultSemiBold">components/HelloWave.tsx</ThemedText> component uses
-          the powerful{' '}
-          <ThemedText type="defaultSemiBold" style={{ fontFamily: Fonts.mono }}>
-            react-native-reanimated
-          </ThemedText>{' '}
-          library to create a waving hand animation.
-        </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The <ThemedText type="defaultSemiBold">components/ParallaxScrollView.tsx</ThemedText>{' '}
-              component provides a parallax effect for the header image.
-            </ThemedText>
-          ),
-        })}
-      </Collapsible>
-    </ParallaxScrollView>
+
+      {renderFilterChips()}
+      {renderContent()}
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  headerImage: {
-    color: '#808080',
-    bottom: -90,
-    left: -35,
-    position: 'absolute',
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
   },
-  titleContainer: {
+  content: {
+    padding: 24,
+    paddingTop: 60,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 24,
+    backgroundColor: 'transparent',
+  },
+  headerIcons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  iconButton: {
+    padding: 4,
+  },
+  filterSection: {
     flexDirection: 'row',
     gap: 8,
+    marginBottom: 32,
+  },
+  filterChip: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    backgroundColor: '#f0f0f0',
+  },
+  filterChipActive: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    backgroundColor: '#007AFF',
+  },
+  filterText: {
+    fontSize: 14,
+    color: '#000',
+  },
+  filterTextActive: {
+    fontSize: 14,
+    color: '#fff',
+    fontWeight: '600',
+  },
+  section: {
+    marginBottom: 32,
+  },
+  sectionTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  gridItem: {
+    width: '47%',
+    marginBottom: 24,
+  },
+  gridArt: {
+    width: '100%',
+    aspectRatio: 1,
+    borderRadius: 12,
+    marginBottom: 8,
+  },
+  gridTitle: {
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  gridSubtitle: {
+    fontSize: 13,
+    color: '#888',
+  },
+  libraryItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+    gap: 16,
+  },
+  libraryArt: {
+    width: 64,
+    height: 64,
+    borderRadius: 8,
+  },
+  libraryItemInfo: {
+    flex: 1,
+  },
+  librarySubtitle: {
+    fontSize: 14,
+    color: '#888',
+    marginTop: 2,
+  },
+  backButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginBottom: 16,
+  },
+  backText: {
+    color: '#007AFF',
+    fontSize: 16,
   },
 });

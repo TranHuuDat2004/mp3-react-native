@@ -19,6 +19,7 @@ const MAPPING = {
   'chevron.left.forwardslash.chevron.right': 'code',
   'chevron.right': 'chevron-right',
   'music.note.list': 'library-music',
+  'rectangle.stack.fill': 'library-books',
 } as IconMapping;
 
 /**

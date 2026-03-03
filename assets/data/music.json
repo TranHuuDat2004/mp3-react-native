@@ -1,0 +1,1107 @@
+[
+    {
+        "id": "Vpop",
+        "title": "Nhạc Việt Nam",
+        "songs": [
+            {
+                "id": "fav3",
+                "title": "Thay Lòng",
+                "artistData": "Nal",
+                "displayArtist": {
+                    "name": "Nal",
+                    "id": "nal"
+                },
+                "artUrl": "img/nal.png",
+                "audioSrc": "audio/thay-long-nal.mp3",
+                "isFavorite": false,
+                "plays": "40.789.123"
+            },
+            {
+                "id": "fav4",
+                "title": "Making My Way",
+                "artistData": "Sơn Tùng M-TP",
+                "displayArtist": {
+                    "name": "Sơn Tùng MTP",
+                    "id": "son-tung-mtp"
+                },
+                "artUrl": "img/making-my-way.jpg",
+                "audioSrc": "audio/making-my-way.mp3",
+                "isFavorite": false,
+                "plays": "85.321.678"
+            }
+        ]
+    },
+    {
+        "id": "VpopRemix",
+        "title": "Nhạc Remix Cực Căng",
+        "songs": [
+            {
+                "id": "fav5",
+                "title": "Tái Sinh Remix",
+                "artistData": "Tùng Dương",
+                "displayArtist": {
+                    "name": "Tùng Dương",
+                    "id": "tung-duong"
+                },
+                "artUrl": "img/tai-sinh-remix.webp",
+                "audioSrc": "audio/tai-sinh-remix.mp3",
+                "isFavorite": false,
+                "plays": "8.321.678"
+            },
+            {
+                "id": "fav6",
+                "title": "Ải hồng nhan Remix",
+                "artistData": "Cần Vinh, Lee Ken",
+                "displayArtist": {
+                    "name": "Cần Vinh, Lee Ken",
+                    "id": "can-vinh"
+                },
+                "artUrl": "img/ai-hong-nhan.jpg",
+                "audioSrc": "audio/ai-hong-nhan-remix.mp3",
+                "isFavorite": false,
+                "plays": "8.456.798"
+            },
+            {
+                "id": "fav10",
+                "title": "Khúc Vương Tình Remix ",
+                "artistData": "Cần Vinh, Lee Ken",
+                "displayArtist": {
+                    "name": "Cần Vinh, Lee Ken",
+                    "id": "can-vinh"
+                },
+                "artUrl": "img/khúc_vương_tình_remix_(cần_vinh,_lee_ken).png",
+                "audioSrc": "audio/khúc_vương_tình_remix_(cần_vinh,_lee_ken).mp3",
+                "isFavorite": false,
+                "plays": "8.321.678"
+            },
+            {
+                "id": "fav7",
+                "title": "Nên Chờ Hay Nên Quên Remix",
+                "artistData": "Cần Vinh, Lee Ken",
+                "displayArtist": {
+                    "name": "Chu Thúy Quỳnh",
+                    "id": "chu-thuy-quynh"
+                },
+                "artUrl": "img/nên_chờ_hay_nên_quên_remix.png",
+                "audioSrc": "audio/nên_chờ_hay_nên_quên_remix.mp3",
+                "isFavorite": false,
+                "plays": "2.456.789"
+            },
+            {
+                "id": "vpop_trucxinh",
+                "title": "Trúc Xinh",
+                "artistData": "Minh Vương M4U ft. Việt (ACV Remix)",
+                "displayArtist": {
+                    "name": "Minh Vương M4U ft. Việt",
+                    "id": "minhvuong-m4u-viet"
+                },
+                "artUrl": "img/trúc_xinh.png",
+                "audioSrc": "audio/trúc_xinh.mp3",
+                "isFavorite": false,
+                "plays": "1.234.567"
+            },
+            {
+                "id": "vpop_tralaithanhxuan",
+                "title": "Trả Lại Thanh Xuân Cho Em",
+                "artistData": "H2K (H2O Remix)",
+                "displayArtist": {
+                    "name": "H2K",
+                    "id": "h2k"
+                },
+                "artUrl": "img/trả_lại_thanh_xuân_cho_em.png",
+                "audioSrc": "audio/trả_lại_thanh_xuân_cho_em.mp3",
+                "isFavorite": false,
+                "plays": "2.345.678"
+            },
+            {
+                "id": "vpop_ruoumung",
+                "title": "Rượu Mừng Hóa Người Dưng",
+                "artistData": "TLong (H2O Remix)",
+                "displayArtist": {
+                    "name": "TLong",
+                    "id": "tlong"
+                },
+                "artUrl": "img/rượu_mừng_hóa_người_dưng.png",
+                "audioSrc": "audio/rượu_mừng_hóa_người_dưng.mp3",
+                "isFavorite": false,
+                "plays": "987.654"
+            },
+            {
+                "id": "vpop_nucuoi1820",
+                "title": "Nụ Cười 18 20",
+                "artistData": "Đoàn Hiếu (ACV Remix)",
+                "displayArtist": {
+                    "name": "Đoàn Hiếu",
+                    "id": "doan-hieu"
+                },
+                "artUrl": "img/nụ_cười_18_20.png",
+                "audioSrc": "audio/nu-cuoi.mp3",
+                "isFavorite": false,
+                "plays": "1.876.543"
+            },
+            {
+                "id": "vpop_mayremix",
+                "title": "Mây (Remix)",
+                "artistData": "Jank & Sỹ Tây (Orinn Remix)",
+                "displayArtist": {
+                    "name": "Jank & Sỹ Tây",
+                    "id": "jank-sy-tay"
+                },
+                "artUrl": "img/mây_remix.png",
+                "audioSrc": "audio/mây_remix.mp3",
+                "isFavorite": false,
+                "plays": "2.109.876"
+            },
+            {
+                "id": "vpop_ketheoduoianhsang",
+                "title": "Kẻ Theo Đuổi Ánh Sáng",
+                "artistData": "Huy Vạc X Tiến Nguyễn (Orinn Remix)",
+                "displayArtist": {
+                    "name": "Huy Vạc X Tiến Nguyễn",
+                    "id": "huyvac-tiennguyen"
+                },
+                "artUrl": "img/kẻ_theo_đuổi_ánh_sáng.png",
+                "audioSrc": "audio/kẻ_theo_đuổi_ánh_sáng.mp3",
+                "isFavorite": false,
+                "plays": "3.401.298"
+            },
+            {
+                "id": "vpop_dunglonhecoanhday",
+                "title": "Đừng Lo Nhé Có Anh Đây",
+                "artistData": "Thiên Tú (Orinn Remix)",
+                "displayArtist": {
+                    "name": "Thiên Tú",
+                    "id": "thien-tu"
+                },
+                "artUrl": "img/đừng_lo_nhé_có_anh_đây.png",
+                "audioSrc": "audio/đừng_lo_nhé_có_anh_đây.mp3",
+                "isFavorite": false,
+                "plays": "2.567.111"
+            },
+            {
+                "id": "vpop_dauconday",
+                "title": "Đâu Còn Đây",
+                "artistData": "Lee Ken X Nal (Orinn Remix)",
+                "displayArtist": {
+                    "name": "Lee Ken X Nal",
+                    "id": "leeken-nal"
+                },
+                "artUrl": "img/đâu_còn_đây.png",
+                "audioSrc": "audio/đâu-còn-đây.mp3",
+                "isFavorite": false,
+                "plays": "1.999.000"
+            },
+            {
+                "id": "vpop_0",
+                "title": "Hạnh Phúc Thoáng Qua",
+                "artistData": "Noo Phước Thịnh (Tiktok Remix)",
+                "displayArtist": {
+                    "name": "Noo Phước Thịnh",
+                    "id": "Noo"
+                },
+                "artUrl": "img/hạnh_phúc_thoáng_qua.png",
+                "audioSrc": "audio/hạnh_phúc_thoáng_qua.mp3",
+                "isFavorite": false,
+                "plays": "1.999.000"
+            },
+            {
+                "id": "vpop_new1",
+                "title": "Em nhắc anh (Remix)",
+                "artistData": "Air Remix",
+                "displayArtist": {
+                    "name": "Air Remix",
+                    "id": "airremix"
+                },
+                "artUrl": "img/ai_anh_cũng_cục_vàng_remix_(em_nhắc_anh).png",
+                "audioSrc": "audio/em-nhac-anh.mp3",
+                "isFavorite": false,
+                "plays": "1.500.000"
+            },
+            {
+                "id": "vpop_new2",
+                "title": "Em Ơi Anh Phải Làm Sao x Hey Hey Hey",
+                "artistData": "Air Remix",
+                "displayArtist": {
+                    "name": "Air Remix",
+                    "id": "airremix"
+                },
+                "artUrl": "img/em_ơi_anh_phải_làm_sao.png",
+                "audioSrc": "audio/em_ơi_anh_phải_làm_sao_x_hey_hey_hey.mp3",
+                "isFavorite": false,
+                "plays": "2.345.678"
+            },
+            {
+                "id": "vpop_new3",
+                "title": "Nắng Dưới Chân Mây",
+                "artistData": "Thazh x Đông",
+                "displayArtist": {
+                    "name": "Thazh x Đông",
+                    "id": "thazh-x-dong"
+                },
+                "artUrl": "img/nắng_dưới_chân_mây.png",
+                "audioSrc": "audio/nắng_dưới_chân_mây.mp3",
+                "isFavorite": false,
+                "plays": "3.456.789"
+            }
+        ]
+    },
+    {
+        "id": "ElectronicEDM",
+        "title": "Electronic & EDM",
+        "songs": [
+            {
+                "id": "edm_a_moment_apart",
+                "title": "A Moment Apart",
+                "artistData": "ODESZA",
+                "displayArtist": {
+                    "name": "ODESZA",
+                    "id": "odesza"
+                },
+                "artUrl": "img/a_moment_apart.png",
+                "audioSrc": "audio/odesza_-_a_moment_apart.mp3",
+                "isFavorite": false,
+                "plays": "12.345.678"
+            },
+            {
+                "id": "edm_faded",
+                "title": "Faded",
+                "artistData": "Alan Walker",
+                "displayArtist": {
+                    "name": "Alan Walker",
+                    "id": "alanwalker"
+                },
+                "artUrl": "img/faded.png",
+                "audioSrc": "audio/alan_walker_-_faded_(lyrics).mp3",
+                "isFavorite": false,
+                "plays": "1.812.345.678"
+            },
+            {
+                "id": "edm_lily",
+                "title": "Lily",
+                "artistData": "Alan Walker, K-391 & Emelie Hollow",
+                "displayArtist": {
+                    "name": "Alan Walker",
+                    "id": "alanwalker"
+                },
+                "artUrl": "img/lily.jpg",
+                "audioSrc": "audio/alan_walker,_k-391_&_emelie_hollow_-_lily_(lyrics).mp3",
+                "isFavorite": true,
+                "plays": "1.523.456.789"
+            },
+            {
+                "id": "edm_spectre",
+                "title": "The Spectre",
+                "artistData": "Alan Walker",
+                "displayArtist": {
+                    "name": "Alan Walker",
+                    "id": "alanwalker"
+                },
+                "artUrl": "img/spectre.jpg",
+                "audioSrc": "audio/alan_walker_-_the_spectre_(lyrics).mp3",
+                "isFavorite": false,
+                "plays": "980.123.456"
+            },
+            {
+                "id": "edm_all_falls_down",
+                "title": "All Falls Down",
+                "artistData": "Alan Walker ft. Noah Cyrus",
+                "displayArtist": {
+                    "name": "Alan Walker",
+                    "id": "alanwalker"
+                },
+                "artUrl": "img/alan_walker_all_falls_down.jpg",
+                "audioSrc": "audio/alan_walker_-_all_falls_down_(feat._noah_cyrus_with_digital_farm_animals).mp3",
+                "isFavorite": false,
+                "plays": "550.987.123"
+            },
+            {
+                "id": "edm_ignite",
+                "title": "Ignite",
+                "artistData": "K-391 & Alan Walker",
+                "displayArtist": {
+                    "name": "K-391",
+                    "id": "k391"
+                },
+                "artUrl": "img/k-391-ignite.png",
+                "audioSrc": "audio/k-391_&_alan_walker_-_ignite_(feat._julie_bergan_&_seungri).mp3",
+                "isFavorite": false,
+                "plays": "750.333.222"
+            },
+            {
+                "id": "edm_on_on",
+                "title": "On & On",
+                "artistData": "Cartoon ft. Daniel Levi",
+                "displayArtist": {
+                    "name": "Cartoon",
+                    "id": "cartoon"
+                },
+                "artUrl": "img/on&on.png",
+                "audioSrc": "audio/cartoon,_jéja_-_on_&_on_(lyrics)_feat._daniel_levi.mp3",
+                "isFavorite": true,
+                "plays": "480.777.888"
+            },
+            {
+                "id": "edm_way_back_home",
+                "title": "Way Back Home",
+                "artistData": "SHAUN ft. Conor Maynard (Sam Feldt Edit)",
+                "displayArtist": {
+                    "name": "SHAUN",
+                    "id": "shaun"
+                },
+                "artUrl": "img/way_back_home.jpg",
+                "audioSrc": "audio/shaun_feat._conor_maynard_-_way_back_home_(lyrics)_sam_feldt_edit.mp3",
+                "isFavorite": false,
+                "plays": "420.123.999"
+            },
+            {
+                "id": "vpop_ngau_hung",
+                "title": "Ngẫu Hứng",
+                "artistData": "Hoaprox",
+                "displayArtist": {
+                    "name": "Hoaprox",
+                    "id": "hoaprox"
+                },
+                "artUrl": "img/ngau-hung.png",
+                "audioSrc": "audio/with_you_(ngẫu_hứng)_-_hoaprox,_nick_strand_&_mio_-_official_mv.mp3",
+                "isFavorite": false,
+                "plays": "150.456.789"
+            },
+            {
+                "id": "vpop_that_girl",
+                "title": "That Girl",
+                "artistData": "Olly Murs",
+                "displayArtist": {
+                    "name": "Olly Murs",
+                    "id": "ollymurs"
+                },
+                "artUrl": "img/that_girl.png",
+                "audioSrc": "audio/[vietsub_+_kara]_that_girl_-_olly_murs_(lyrics)_-_tik_tok.mp3",
+                "isFavorite": false,
+                "plays": "120.987.654"
+            }
+        ]
+    },
+    {
+        "id": "DouyinEDM",
+        "title": "Douyin EDM",
+        "songs": [
+            {
+                "id": "vpop_douyin_instrumental",
+                "title": "Douyin Instrumental",
+                "artistData": "Douyin",
+                "displayArtist": {
+                    "name": "Douyin",
+                    "id": "douyin"
+                },
+                "artUrl": "img/douyin_intrumental.jpg",
+                "audioSrc": "audio/douyin_intrumental.mp3",
+                "isFavorite": false,
+                "plays": "1.111.222"
+            },
+            {
+                "id": "vpop_douyin",
+                "title": "Douyin",
+                "artistData": "Hot Trend",
+                "displayArtist": {
+                    "name": "Hot Trend",
+                    "id": "hot-trend"
+                },
+                "artUrl": "img/douyin.jpg",
+                "audioSrc": "audio/douyin.mp3",
+                "isFavorite": false,
+                "plays": "2.222.333"
+            }
+        ]
+    },
+    {
+        "id": "lycorisrecoil",
+        "title": "Lycoris Recoil OST",
+        "songs": [
+            {
+                "id": "lyco_alive",
+                "title": "ALIVE",
+                "artistData": "ClariS",
+                "displayArtist": {
+                    "name": "ClariS",
+                    "id": "claris"
+                },
+                "artUrl": "img/alive.png",
+                "audioSrc": "audio/alive.mp3",
+                "isFavorite": false,
+                "plays": "15.234.567"
+            },
+            {
+                "id": "lyco_tower",
+                "title": "Tower of Flower",
+                "artistData": "Sayuri",
+                "displayArtist": {
+                    "name": "Sayuri",
+                    "id": "sayuri"
+                },
+                "artUrl": "img/tower_of_flower.png",
+                "audioSrc": "audio/tower_of_flower.mp3",
+                "isFavorite": false,
+                "plays": "22.987.654"
+            },
+            {
+                "id": "lyco_alive_inst",
+                "title": "ALIVE (Instrumental)",
+                "artistData": "ClariS",
+                "displayArtist": {
+                    "name": "ClariS",
+                    "id": "claris"
+                },
+                "artUrl": "img/alive-instrumental.jpg",
+                "audioSrc": "audio/alive-instrumental.mp3",
+                "isFavorite": false,
+                "plays": "5.876.123"
+            },
+            {
+                "id": "lyco_tower_inst",
+                "title": "Tower of Flower (Instrumental)",
+                "artistData": "Sayuri",
+                "displayArtist": {
+                    "name": "Sayuri",
+                    "id": "sayuri"
+                },
+                "artUrl": "img/tower_of_flower_instrumental.jpg",
+                "audioSrc": "audio/tower_of_flower_instrumental.mp3",
+                "isFavorite": false,
+                "plays": "8.123.456"
+            }
+        ]
+    },
+    {
+        "id": "Mahiru",
+        "title": "Thiên sứ nhà bên - Mahiru",
+        "songs": [
+            {
+                "id": "mahiru1",
+                "title": "小さな恋のうた",
+                "artistData": "椎名真昼 (CV: 石見舞菜香)",
+                "displayArtist": {
+                    "name": "椎名真昼 (CV: 石見舞菜香)",
+                    "id": "MahiruShiina"
+                },
+                "artUrl": "img/mahiru1.png",
+                "audioSrc": "audio/mahiru_ed1.mp3",
+                "isFavorite": true,
+                "plays": "4.258.910"
+            },
+            {
+                "id": "mahiru2",
+                "title": "愛唄",
+                "artistData": "椎名真昼 (CV: 石見舞菜香)",
+                "displayArtist": {
+                    "name": "椎名真昼 (CV: 石見舞菜香)",
+                    "id": "MahiruShiina"
+                },
+                "artUrl": "img/mahiru2.png",
+                "audioSrc": "audio/mahiru_ed2.mp3",
+                "isFavorite": true,
+                "plays": "3.789.552"
+            },
+            {
+                "id": "mahiru3",
+                "title": "君に届け",
+                "artistData": "椎名真昼 (CV: 石見舞菜香)",
+                "displayArtist": {
+                    "name": "椎名真昼 (CV: 石見舞菜香)",
+                    "id": "MahiruShiina"
+                },
+                "artUrl": "img/mahiru3.png",
+                "audioSrc": "audio/mahiru_ed3.mp3",
+                "isFavorite": true,
+                "plays": "5.102.304"
+            },
+            {
+                "id": "mahiru4",
+                "title": "君に届け - Instrumental",
+                "artistData": "Instrumental",
+                "displayArtist": {
+                    "name": "椎名真昼 (CV: 石見舞菜香)",
+                    "id": "MahiruShiina"
+                },
+                "artUrl": "img/mahiru4.png",
+                "audioSrc": "audio/mahiru_ed3_instrumental.mp3",
+                "isFavorite": true,
+                "plays": "1.567.890"
+            },
+            {
+                "id": "mahiru5",
+                "title": "ギフト - Pf Solo ver.",
+                "artistData": "Instrumental",
+                "displayArtist": {
+                    "name": "椎名真昼 (CV: 石見舞菜香)",
+                    "id": "MahiruShiina"
+                },
+                "artUrl": "img/mahiru_gift.png",
+                "audioSrc": "audio/mahiru_gift.mp3",
+                "isFavorite": true,
+                "plays": "467.790"
+            },
+            {
+                "id": "mahiru6",
+                "title": "君に届け - Piano.",
+                "artistData": "Instrumental",
+                "displayArtist": {
+                    "name": "Instrumental",
+                    "id": "MahiruShiina"
+                },
+                "artUrl": "img/mahiru5.png",
+                "audioSrc": "audio/mahiru_ed3_piano.mp3",
+                "isFavorite": true,
+                "plays": "167.123"
+            },
+            {
+                "id": "mahiru7",
+                "title": "Little Love Song",
+                "artistData": "Ru's Piano Ru味春捲",
+                "displayArtist": {
+                    "name": "Ru's Piano Ru味春捲",
+                    "id": "MahiruShiina"
+                },
+                "artUrl": "img/mahiru6.png",
+                "audioSrc": "audio/little_love_song.mp3",
+                "isFavorite": true,
+                "plays": "1.134.892"
+            }
+        ]
+    },
+    {
+        "id": "SummerPockets",
+        "title": "Summer Pockets - OST & Vocal",
+        "songs": [
+            {
+                "id": "sp1",
+                "title": "アルカレイド (Alkaleido)",
+                "artistData": "鈴木このみ (Konomi Suzuki)",
+                "displayArtist": {
+                    "name": "Konomi Suzuki",
+                    "id": "KonomiSuzuki"
+                },
+                "artUrl": "img/summer_pockets_op.png",
+                "audioSrc": "audio/summer_pockets_op.mp3",
+                "isFavorite": true,
+                "plays": "4.481.234"
+            },
+            {
+                "id": "sp2",
+                "title": "Lasting Moment",
+                "artistData": "鈴木このみ (Konomi Suzuki)",
+                "displayArtist": {
+                    "name": "Konomi Suzuki",
+                    "id": "KonomiSuzuki"
+                },
+                "artUrl": "img/tsumugi.png",
+                "audioSrc": "audio/summer_pockets_ed.mp3",
+                "isFavorite": false,
+                "plays": "5.356.789"
+            },
+            {
+                "id": "sp3",
+                "title": "羽のゆりかご",
+                "artistData": "水谷瑠奈 (NanosizeMir)",
+                "displayArtist": {
+                    "name": "水谷瑠奈 (NanosizeMir)",
+                    "id": "RunaMizutani"
+                },
+                "artUrl": "img/hane_no_yurikago.png",
+                "audioSrc": "audio/hane_no_yurikago.mp3",
+                "isFavorite": false,
+                "plays": "2.987.654"
+            },
+            {
+                "id": "sp4",
+                "title": "Sea, You & Me",
+                "artistData": "紬ヴェンダース (CV: 岩井映美里)",
+                "displayArtist": {
+                    "name": "紬ヴェンダース",
+                    "id": "TsumugiWenders"
+                },
+                "artUrl": "img/tsumugi.png",
+                "audioSrc": "audio/tsumugi.mp3",
+                "isFavorite": true,
+                "plays": "1.205.333"
+            },
+            {
+                "id": "sp5",
+                "title": "Hamu 20th Anniversary",
+                "artistData": "Instrumental",
+                "displayArtist": {
+                    "name": "Key Sound Label",
+                    "id": "KeySoundLabel"
+                },
+                "artUrl": "img/key20th.png",
+                "audioSrc": "audio/summer_pockets_op_20th_key.mp3",
+                "isFavorite": false,
+                "plays": "987.654"
+            },
+            {
+                "id": "sp6",
+                "title": "アスタロア (Asterlore)",
+                "artistData": "riya (eufonius)",
+                "displayArtist": {
+                    "name": "riya (eufonius)",
+                    "id": "riyaEufonius"
+                },
+                "artUrl": "img/summer_pockets_asterlore.png",
+                "audioSrc": "audio/summer_pockets_asterlore.mp3",
+                "isFavorite": true,
+                "plays": "3.015.888"
+            },
+            {
+                "id": "sp7",
+                "title": "羽のゆりかご - Instrumental",
+                "artistData": "水谷瑠奈 (NanosizeMir)",
+                "displayArtist": {
+                    "name": "水谷瑠奈 (NanosizeMir)",
+                    "id": "RunaMizutani"
+                },
+                "artUrl": "img/hane_no_yurikago_instrumental.png",
+                "audioSrc": "audio/hane_no_yurikago_instrumental.mp3",
+                "isFavorite": false,
+                "plays": "223.654"
+            }
+        ]
+    },
+    {
+        "id": "ConanMovie",
+        "title": "Conan Movie ",
+        "songs": [
+            {
+                "id": "conan28",
+                "title": "TWILIGHT",
+                "artistData": "King Gnu",
+                "displayArtist": {
+                    "name": "King Gnu",
+                    "id": "KingGnu"
+                },
+                "artUrl": "img/conan28.jpg",
+                "audioSrc": "audio/twilight.mp3",
+                "isFavorite": false,
+                "plays": "9.876.543"
+            },
+            {
+                "id": "conan26",
+                "title": "Utsukushii Hire",
+                "artistData": "Spitz",
+                "displayArtist": {
+                    "name": "Spitz ",
+                    "id": "Spitz"
+                },
+                "artUrl": "img/utsukushii_hire.jpg",
+                "audioSrc": "audio/utsukushii_hire.mp3",
+                "isFavorite": false,
+                "plays": "9.876.543"
+            }
+        ]
+    },
+    {
+        "id": "KaguyaSama",
+        "title": "Kaguya-sama: Love Is War",
+        "songs": [
+            {
+                "id": "kaguya01",
+                "title": "Sentimental Crisis",
+                "artistData": "halca",
+                "displayArtist": {
+                    "name": "halca",
+                    "id": "halca"
+                },
+                "artUrl": "img/love_is_war.jpg",
+                "audioSrc": "audio/sentimental_crisis.mp3",
+                "isFavorite": true,
+                "plays": "8,412,991"
+            },
+            {
+                "id": "kaguya02",
+                "title": "Sentimental Crisis (Instrumental)",
+                "artistData": "Ryuhei Yamada",
+                "displayArtist": {
+                    "name": "Ryuhei Yamada",
+                    "id": "RyuheiYamada"
+                },
+                "artUrl": "img/love_is_war.jpg",
+                "audioSrc": "audio/sentimental_crisis_(instrumental).mp3",
+                "isFavorite": false,
+                "plays": "2,157,304"
+            },
+            {
+                "id": "kaguya03",
+                "title": "Heart Notes",
+                "artistData": "Airi Suzuki",
+                "displayArtist": {
+                    "name": "Airi Suzuki",
+                    "id": "AiriSuzuki"
+                },
+                "artUrl": "img/chika-mini.jpg",
+                "audioSrc": "audio/heart-notes.mp3",
+                "isFavorite": false,
+                "plays": "2,157,311"
+            }
+        ]
+    },
+    {
+        "id": "KaguyaSamaPianoEP",
+        "title": "Kaguya - Sama: Love Is War - Piano Reflections - EP",
+        "songs": [
+            {
+                "id": "kaguya_piano_01",
+                "title": "Kansetsu Ki (Main Theme)",
+                "artistData": "Torby Brand",
+                "displayArtist": {
+                    "name": "Torby Brand",
+                    "id": "TorbyBrand"
+                },
+                "artUrl": "img/hayasaka-wallpaper1.jpg",
+                "audioSrc": "audio/main_theme.mp3",
+                "isFavorite": false,
+                "plays": "2,157,311"
+            },
+            {
+                "id": "kaguya_piano_02",
+                "title": "Sentimental Crisis Piano",
+                "artistData": "Torby Brand",
+                "displayArtist": {
+                    "name": "Torby Brand",
+                    "id": "TorbyBrand"
+                },
+                "artUrl": "img/hayasaka-wallpaper2.jpg",
+                "audioSrc": "audio/sentimental_crisis_piano.mp3",
+                "isFavorite": true,
+                "plays": "2,157,311"
+            },
+            {
+                "id": "kaguya_piano_03",
+                "title": "Kaze Ni Fukarete",
+                "artistData": "Torby Brand",
+                "displayArtist": {
+                    "name": "Torby Brand",
+                    "id": "TorbyBrand"
+                },
+                "artUrl": "img/kaguya-wallpaper.jpeg",
+                "audioSrc": "audio/kaze_ni_fukarete.mp3",
+                "isFavorite": false,
+                "plays": "2,157,311"
+            },
+            {
+                "id": "kaguya_piano_04",
+                "title": "Heart Ha Oteage",
+                "artistData": "Torby Brand",
+                "displayArtist": {
+                    "name": "Torby Brand",
+                    "id": "TorbyBrand"
+                },
+                "artUrl": "img/kaguya-minimalist3.png",
+                "audioSrc": "audio/heart_ha_oteage.mp3",
+                "isFavorite": true,
+                "plays": "2,157,311"
+            },
+            {
+                "id": "kaguya_piano_05",
+                "title": "Heart Notes",
+                "artistData": "Torby Brand",
+                "displayArtist": {
+                    "name": "Torby Brand",
+                    "id": "TorbyBrand"
+                },
+                "artUrl": "img/kaguya-minimalist2.png",
+                "audioSrc": "audio/heart_note.mp3",
+                "isFavorite": true,
+                "plays": "2,157,311"
+            },
+            {
+                "id": "kaguya_piano_06",
+                "title": "That Kind of Summer",
+                "artistData": "Torby Brand",
+                "displayArtist": {
+                    "name": "Torby Brand",
+                    "id": "TorbyBrand"
+                },
+                "artUrl": "img/kaguya-minimalist.png",
+                "audioSrc": "audio/the_kind_of_summer.mp3",
+                "isFavorite": false,
+                "plays": "2,157,311"
+            }
+        ]
+    },
+    {
+        "id": "GotoubunNoHanayomeEP",
+        "title": "Gotoubun no Hanayome Collection",
+        "songs": [
+            {
+                "id": "gotoubun_01",
+                "title": "Hatsukoi - Strings & Piano Arrange",
+                "artistData": "Nakano-ke no Itsutsugo",
+                "displayArtist": {
+                    "name": "Nakano-ke no Itsutsugo",
+                    "id": "NakanoQuint"
+                },
+                "artUrl": "img/hatsukoi.jpg",
+                "audioSrc": "audio/hatsukoi_-_strings_&_piano_arrange.mp3",
+                "isFavorite": true,
+                "plays": "2,157,311"
+            },
+            {
+                "id": "gotoubun_02",
+                "title": "Arigatou no Hana (Orchestra)",
+                "artistData": "Nakano-ke no Itsutsugo",
+                "displayArtist": {
+                    "name": "Nakano-ke no Itsutsugo",
+                    "id": "NakanoQuint"
+                },
+                "artUrl": "img/arigatou_no_hana_(orchestra).jpg",
+                "audioSrc": "audio/arigatou_no_hana_(orchestra).mp3",
+                "isFavorite": false,
+                "plays": "2,157,311"
+            },
+            {
+                "id": "gotoubun_03",
+                "title": "Arigatou no Hana (Cover)",
+                "artistData": "Nakano-ke no Itsutsugo",
+                "displayArtist": {
+                    "name": "Nakano-ke no Itsutsugo",
+                    "id": "NakanoQuint"
+                },
+                "artUrl": "img/hatsukoi_(instrumental).png",
+                "audioSrc": "audio/arigatou_no_hana_(cover).mp3",
+                "isFavorite": false,
+                "plays": "2,157,311"
+            },
+            {
+                "id": "gotoubun_04",
+                "title": "Arigatou no Hana (Original)",
+                "artistData": "Nakano-ke no Itsutsugo",
+                "displayArtist": {
+                    "name": "Nakano-ke no Itsutsugo",
+                    "id": "NakanoQuint"
+                },
+                "artUrl": "img/gotorbun.jpg",
+                "audioSrc": "audio/arigatou_no_hana.mp3",
+                "isFavorite": true,
+                "plays": "2,157,311"
+            },
+            {
+                "id": "gotoubun_05",
+                "title": "Hatsukoi (Instrumental)",
+                "artistData": "Nakano-ke no Itsutsugo",
+                "displayArtist": {
+                    "name": "Nakano-ke no Itsutsugo",
+                    "id": "NakanoQuint"
+                },
+                "artUrl": "img/gotorbun-wedding.png",
+                "audioSrc": "audio/hatsukoi_(instrumental).mp3",
+                "isFavorite": false,
+                "plays": "2,157,311"
+            },
+            {
+                "id": "gotoubun_06",
+                "title": "Arigatou no Hana (Instrumental)",
+                "artistData": "Nakano-ke no Itsutsugo",
+                "displayArtist": {
+                    "name": "Nakano-ke no Itsutsugo",
+                    "id": "NakanoQuint"
+                },
+                "artUrl": "img/gotorbun-adult.png",
+                "audioSrc": "audio/arigatou_no_hana_(instrumental).mp3",
+                "isFavorite": false,
+                "plays": "2,157,311"
+            },
+            {
+                "id": "gotoubun_06",
+                "title": "Arigatou no Hana (Remix by AI)",
+                "artistData": "Nakano-ke no Itsutsugo",
+                "displayArtist": {
+                    "name": "Nakano-ke no Itsutsugo",
+                    "id": "NakanoQuint"
+                },
+                "artUrl": "img/gotorbun3.jpg",
+                "audioSrc": "audio/arigatou_no_hana_(remix_by_ai).mp3",
+                "isFavorite": false,
+                "plays": "2,157,311"
+            },
+            {
+                "id": "gotoubun_track_01",
+                "title": "Op2 Orchestra",
+                "artistData": "Nakano-ke no Itsutsugo",
+                "displayArtist": {
+                    "name": "Nakano-ke no Itsutsugo",
+                    "id": "NakanoQuint"
+                },
+                "artUrl": "img/gotorbun_(1).jpg",
+                "audioSrc": "audio/op2_orchestra.mp3",
+                "isFavorite": true,
+                "plays": "1,020,300"
+            },
+            {
+                "id": "gotoubun_track_02",
+                "title": "After Wedding",
+                "artistData": "Nakano-ke no Itsutsugo",
+                "displayArtist": {
+                    "name": "Nakano-ke no Itsutsugo",
+                    "id": "NakanoQuint"
+                },
+                "artUrl": "img/gotorbun_(2).jpg",
+                "audioSrc": "audio/after_wedding.mp3",
+                "isFavorite": false,
+                "plays": "980,500"
+            },
+            {
+                "id": "gotoubun_track_03",
+                "title": "Memories",
+                "artistData": "Nakano-ke no Itsutsugo",
+                "displayArtist": {
+                    "name": "Nakano-ke no Itsutsugo",
+                    "id": "NakanoQuint"
+                },
+                "artUrl": "img/gotorbun_(3).jpg",
+                "audioSrc": "audio/memories.mp3",
+                "isFavorite": false,
+                "plays": "850,210"
+            },
+            {
+                "id": "gotoubun_track_04",
+                "title": "Takaramono",
+                "artistData": "Nakano-ke no Itsutsugo",
+                "displayArtist": {
+                    "name": "Nakano-ke no Itsutsugo",
+                    "id": "NakanoQuint"
+                },
+                "artUrl": "img/gotorbun_(4).jpg",
+                "audioSrc": "audio/takaramono.mp3",
+                "isFavorite": true,
+                "plays": "2,450,111"
+            },
+            {
+                "id": "gotoubun_track_05",
+                "title": "The future",
+                "artistData": "Nakano-ke no Itsutsugo",
+                "displayArtist": {
+                    "name": "Nakano-ke no Itsutsugo",
+                    "id": "NakanoQuint"
+                },
+                "artUrl": "img/gotorbun_(5).jpg",
+                "audioSrc": "audio/the_future.mp3",
+                "isFavorite": false,
+                "plays": "760,000"
+            },
+            {
+                "id": "gotoubun_track_06",
+                "title": "Hatsukoi Orchestra",
+                "artistData": "Nakano-ke no Itsutsugo",
+                "displayArtist": {
+                    "name": "Nakano-ke no Itsutsugo",
+                    "id": "NakanoQuint"
+                },
+                "artUrl": "img/gotorbun_(6).jpg",
+                "audioSrc": "audio/hatsukoi_orchestra.mp3",
+                "isFavorite": true,
+                "plays": "3,100,555"
+            },
+            {
+                "id": "gotoubun_track_07",
+                "title": "The ring",
+                "artistData": "Nakano-ke no Itsutsugo",
+                "displayArtist": {
+                    "name": "Nakano-ke no Itsutsugo",
+                    "id": "NakanoQuint"
+                },
+                "artUrl": "img/gotorbun_(7).jpg",
+                "audioSrc": "audio/the_ring.mp3",
+                "isFavorite": false,
+                "plays": "650,400"
+            },
+            {
+                "id": "gotoubun_track_08",
+                "title": "Wedding Theme",
+                "artistData": "Nakano-ke no Itsutsugo",
+                "displayArtist": {
+                    "name": "Nakano-ke no Itsutsugo",
+                    "id": "NakanoQuint"
+                },
+                "artUrl": "img/gotorbun_(8).jpg",
+                "audioSrc": "audio/wedding_theme.mp3",
+                "isFavorite": true,
+                "plays": "1,890,200"
+            },
+            {
+                "id": "gotoubun_track_09",
+                "title": "Rena Nakano Theme",
+                "artistData": "Nakano-ke no Itsutsugo",
+                "displayArtist": {
+                    "name": "Nakano-ke no Itsutsugo",
+                    "id": "NakanoQuint"
+                },
+                "artUrl": "img/gotorbun_(9).jpg",
+                "audioSrc": "audio/rena_nakano_theme.mp3",
+                "isFavorite": false,
+                "plays": "540,100"
+            },
+            {
+                "id": "gotoubun_track_10",
+                "title": "Op1 Orchestra",
+                "artistData": "Nakano-ke no Itsutsugo",
+                "displayArtist": {
+                    "name": "Nakano-ke no Itsutsugo",
+                    "id": "NakanoQuint"
+                },
+                "artUrl": "img/gotorbun_(10).jpg",
+                "audioSrc": "audio/op1_orchestra.mp3",
+                "isFavorite": false,
+                "plays": "540,100"
+            }
+        ]
+    },
+    {
+        "id": "mayonaka_heart_tune",
+        "title": "Mayonaka Heart Tune",
+        "songs": [
+            {
+                "id": "mayonaka_heart_tune_01",
+                "title": "Koe no Kiseki (声の軌跡)",
+                "artistData": "Soala",
+                "displayArtist": {
+                    "name": "Soala",
+                    "id": "soala"
+                },
+                "artUrl": "img/koe_no_kiseki.png",
+                "audioSrc": "audio/koe_no_kiseki_(声の軌跡)』by_soala.mp3",
+                "isFavorite": false,
+                "plays": "890.123"
+            }
+        ]
+    },
+    {
+        "id": "riichi_city",
+        "title": "Riichi City",
+        "songs": [
+            {
+                "id": "riichi_city_01",
+                "title": "Lobby Music 2",
+                "artistData": "Game Music",
+                "displayArtist": {
+                    "name": "Game Music",
+                    "id": "game-music"
+                },
+                "artUrl": "img/lobby_music_2.jpg",
+                "audioSrc": "audio/lobby_music2.mp3",
+                "isFavorite": false,
+                "plays": "500.000"
+            },
+            {
+                "id": "riichi_city_02",
+                "title": "Sunday",
+                "artistData": "Suno AI",
+                "displayArtist": {
+                    "name": "Suno AI",
+                    "id": "sunoa"
+                },
+                "artUrl": "img/sunday.jpg",
+                "audioSrc": "audio/sunday.mp3",
+                "isFavorite": false,
+                "plays": "888.999"
+            }
+        ]
+    }
+]
