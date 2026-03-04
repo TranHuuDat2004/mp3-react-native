@@ -1,0 +1,14 @@
+# .easignore ignores files that shouldn't be uploaded to EAS Build
+node_modules/
+.expo/
+dist/
+web-build/
+.git/
+android/
+ios/
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+.DS_Store
+*.pem
+.env*.local
