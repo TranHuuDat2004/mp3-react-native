@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity, View, Text, KeyboardAvoidingView, Platform } from 'react-native';
-import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { supabase } from '@/lib/supabase';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import React, { useState } from 'react';
+import { ActivityIndicator, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 export default function SignupScreen() {
     const [name, setName] = useState('');
@@ -11,8 +12,32 @@ export default function SignupScreen() {
     const [password, setPassword] = useState('');
     const router = useRouter();
 
-    const handleSignup = () => {
-        router.replace('/(tabs)');
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleSignup = async () => {
+        if (!email || !password || !name) {
+            alert('Please fill in all fields');
+            return;
+        }
+
+        setIsLoading(true);
+        const { error } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                data: {
+                    full_name: name,
+                }
+            }
+        });
+
+        if (error) {
+            alert(error.message);
+            setIsLoading(false);
+        } else {
+            alert('Go to your email and confirm your address to complete the registration.');
+            router.replace('/(auth)/login');
+        }
     };
 
     return (
@@ -67,8 +92,16 @@ export default function SignupScreen() {
                         />
                     </View>
 
-                    <TouchableOpacity style={styles.button} onPress={handleSignup}>
-                        <Text style={styles.buttonText}>Create Account</Text>
+                    <TouchableOpacity
+                        style={[styles.button, isLoading && { opacity: 0.7 }]}
+                        onPress={handleSignup}
+                        disabled={isLoading}
+                    >
+                        {isLoading ? (
+                            <ActivityIndicator color="#fff" />
+                        ) : (
+                            <Text style={styles.buttonText}>Create Account</Text>
+                        )}
                     </TouchableOpacity>
 
                     <TouchableOpacity

@@ -21,8 +21,8 @@ CREATE TABLE songs (
 );
 
 -- 3. Enable Row Level Security (RLS)
-ALTER TABLE categories ENABLE CONTROL ROW LEVEL SECURITY;
-ALTER TABLE songs ENABLE CONTROL ROW LEVEL SECURITY;
+ALTER TABLE categories ENABLE ROW LEVEL SECURITY;
+ALTER TABLE songs ENABLE ROW LEVEL SECURITY;
 
 -- 4. Create policies to allow public read (for testing)
 CREATE POLICY "Public Read Access" ON categories FOR SELECT USING (true);
