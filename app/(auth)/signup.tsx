@@ -43,7 +43,7 @@ export default function SignupScreen() {
     return (
         <ThemedView style={styles.container}>
             <KeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
                 style={styles.inner}
             >
                 <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
@@ -51,7 +51,7 @@ export default function SignupScreen() {
                 </TouchableOpacity>
 
                 <View style={styles.header}>
-                    <ThemedText type="title" style={styles.title}>Join MusicStream</ThemedText>
+                    <ThemedText type="title" style={styles.title}>Join MyMusicPlayer</ThemedText>
                     <ThemedText style={styles.subtitle}>Discover millions of songs today!</ThemedText>
                 </View>
 

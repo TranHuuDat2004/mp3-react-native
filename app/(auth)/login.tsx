@@ -2,9 +2,13 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { supabase } from '@/lib/supabase';
 import { Ionicons } from '@expo/vector-icons';
+import * as Linking from 'expo-linking';
 import { useRouter } from 'expo-router';
+import * as WebBrowser from 'expo-web-browser';
 import React, { useState } from 'react';
 import { ActivityIndicator, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+
+WebBrowser.maybeCompleteAuthSession();
 
 export default function LoginScreen() {
     const [email, setEmail] = useState('');
@@ -33,17 +37,53 @@ export default function LoginScreen() {
         }
     };
 
+    const handleGoogleLogin = async () => {
+        setIsLoading(true);
+        try {
+            const redirectUrl = Linking.createURL('/(tabs)');
+            const { data, error } = await supabase.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    redirectTo: redirectUrl,
+                    skipBrowserRedirect: true,
+                },
+            });
+
+            if (error) throw error;
+
+            if (data?.url) {
+                const result = await WebBrowser.openAuthSessionAsync(data.url, redirectUrl);
+                if (result.type === 'success' && result.url) {
+                    const { queryParams } = Linking.parse(result.url);
+                    const { access_token, refresh_token } = queryParams as any;
+
+                    if (access_token && refresh_token) {
+                        await supabase.auth.setSession({
+                            access_token,
+                            refresh_token,
+                        });
+                        router.replace('/(tabs)');
+                    }
+                }
+            }
+        } catch (error: any) {
+            alert(error.message || 'An error occurred during Google Login');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     return (
         <ThemedView style={styles.container}>
             <KeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
                 style={styles.inner}
             >
                 <View style={styles.header}>
                     <View style={styles.logoContainer}>
                         <Ionicons name="musical-notes" size={48} color="#fff" />
                     </View>
-                    <ThemedText type="title" style={styles.title}>MusicStream</ThemedText>
+                    <ThemedText type="title" style={styles.title}>MyMusicPlayer</ThemedText>
                     <ThemedText style={styles.subtitle}>Log in to your account</ThemedText>
                 </View>
 
@@ -83,6 +123,21 @@ export default function LoginScreen() {
                         ) : (
                             <Text style={styles.buttonText}>Log In</Text>
                         )}
+                    </TouchableOpacity>
+
+                    <View style={styles.divider}>
+                        <View style={styles.line} />
+                        <Text style={styles.dividerText}>OR</Text>
+                        <View style={styles.line} />
+                    </View>
+
+                    <TouchableOpacity
+                        style={styles.googleButton}
+                        onPress={handleGoogleLogin}
+                        disabled={isLoading}
+                    >
+                        <Ionicons name="logo-google" size={20} color="#000" />
+                        <Text style={styles.googleButtonText}>Continue with Google</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -180,6 +235,37 @@ const styles = StyleSheet.create({
     },
     linkText: {
         color: '#007AFF',
+        fontWeight: '600',
+    },
+    divider: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: 20,
+    },
+    line: {
+        flex: 1,
+        height: 1,
+        backgroundColor: '#eee',
+    },
+    dividerText: {
+        marginHorizontal: 10,
+        color: '#888',
+        fontSize: 14,
+    },
+    googleButton: {
+        height: 56,
+        flexDirection: 'row',
+        backgroundColor: '#fff',
+        borderRadius: 16,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#ddd',
+        gap: 12,
+    },
+    googleButtonText: {
+        color: '#000',
+        fontSize: 16,
         fontWeight: '600',
     },
 });
