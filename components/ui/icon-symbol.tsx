@@ -21,6 +21,7 @@ const MAPPING = {
   'music.note.list': 'library-music',
   'rectangle.stack.fill': 'library-books',
   'person.fill': 'person',
+  'list.bullet': 'list',
 } as IconMapping;
 
 /**

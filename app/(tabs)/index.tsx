@@ -4,12 +4,13 @@ import { Audio, InterruptionModeAndroid, InterruptionModeIOS } from 'expo-av';
 import { Image } from 'expo-image';
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Dimensions, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Dimensions, FlatList, Modal, ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 
 import musicData from '@/assets/data/music.json';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { AssetMap } from '@/constants/assets-map';
+import { supabase } from '@/lib/supabase';
 
 const { width } = Dimensions.get('window');
 
@@ -35,6 +36,96 @@ export default function MusicPlayerScreen() {
   const [isRepeat, setIsRepeat] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
+  const [isPlaylistModalVisible, setIsPlaylistModalVisible] = useState(false);
+  const [userPlaylists, setUserPlaylists] = useState<any[]>([]);
+  const [newPlaylistName, setNewPlaylistName] = useState('');
+  const [isCreatingInModal, setIsCreatingInModal] = useState(false);
+
+  const fetchUserPlaylists = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+    const { data } = await supabase.from('playlists').select('id, title').eq('user_id', user.id).order('created_at', { ascending: false });
+    setUserPlaylists(data || []);
+  };
+
+  const currentSong = allSongs[songIndex];
+
+  const handleAddToPlaylistClick = () => {
+    fetchUserPlaylists();
+    setIsPlaylistModalVisible(true);
+  };
+
+  const handleSelectPlaylist = async (playlistId: string) => {
+    setIsPlaylistModalVisible(false);
+
+    // 1. Lookup song UUID in Supabase by title and artist
+    const { data: dbSongs, error: searchError } = await supabase
+      .from('songs')
+      .select('id')
+      .eq('title', currentSong.title)
+      .eq('artist_data', currentSong.artistData)
+      .limit(1);
+
+    if (searchError || !dbSongs || dbSongs.length === 0) {
+      alert('Could not find this song in the database. Did you run the SQL seed script?');
+      return;
+    }
+
+    const songId = dbSongs[0].id;
+
+    // 2. Add to playlist_songs
+    const { error: insertError } = await supabase
+      .from('playlist_songs')
+      .insert({
+        playlist_id: playlistId,
+        song_id: songId
+      });
+
+    if (insertError) {
+      if (insertError.code === '23505') {
+        alert('Song is already in this playlist!');
+      } else {
+        alert('Error adding song to playlist.');
+      }
+    } else {
+      showToast('Added to Playlist 🎵');
+    }
+  };
+
+  const handleCreateAndAddPlaylist = async () => {
+    if (!newPlaylistName.trim()) {
+      alert('Please enter a playlist name.');
+      return;
+    }
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    setIsCreatingInModal(true);
+
+    // 1. Create the playlist
+    const { data: playlist, error: createError } = await supabase
+      .from('playlists')
+      .insert({
+        title: newPlaylistName.trim(),
+        user_id: user.id
+      })
+      .select('id')
+      .single();
+
+    if (createError) {
+      alert('Error creating playlist: ' + createError.message);
+      setIsCreatingInModal(false);
+      return;
+    }
+
+    setIsCreatingInModal(false);
+    setNewPlaylistName('');
+
+    // 2. Add current song to the new playlist
+    await handleSelectPlaylist(playlist.id);
+  };
+
   const stateRef = useRef({
     songIndex,
     isShuffle,
@@ -50,8 +141,6 @@ export default function MusicPlayerScreen() {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 2000);
   };
-
-  const currentSong = allSongs[songIndex];
 
   useEffect(() => {
     if (params.songIndex !== undefined && !Array.isArray(params.songIndex)) {
@@ -201,8 +290,8 @@ export default function MusicPlayerScreen() {
       <ScrollView style={styles.container} contentContainerStyle={styles.content}>
         <ThemedView style={styles.header}>
           <ThemedText type="subtitle">Now Playing</ThemedText>
-          <TouchableOpacity>
-            <Ionicons name="ellipsis-horizontal" size={24} color="#888" />
+          <TouchableOpacity onPress={handleAddToPlaylistClick}>
+            <Ionicons name="add-circle-outline" size={28} color="#007AFF" />
           </TouchableOpacity>
         </ThemedView>
 
@@ -285,6 +374,70 @@ export default function MusicPlayerScreen() {
           ))}
         </View>
       </ScrollView>
+
+      <Modal
+        visible={isPlaylistModalVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setIsPlaylistModalVisible(false)}
+      >
+        <TouchableOpacity
+          style={styles.modalOverlay}
+          activeOpacity={1}
+          onPress={() => setIsPlaylistModalVisible(false)}
+        >
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <ThemedText type="subtitle">Add to Playlist</ThemedText>
+              <TouchableOpacity onPress={() => setIsPlaylistModalVisible(false)}>
+                <Ionicons name="close" size={24} color="#000" />
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.modalCreateSection}>
+              <TextInput
+                style={styles.modalInput}
+                placeholder="Create new playlist..."
+                placeholderTextColor="#888"
+                value={newPlaylistName}
+                onChangeText={setNewPlaylistName}
+              />
+              <TouchableOpacity
+                style={[styles.modalCreateButton, isCreatingInModal && { opacity: 0.7 }]}
+                onPress={handleCreateAndAddPlaylist}
+                disabled={isCreatingInModal}
+              >
+                {isCreatingInModal ? (
+                  <ActivityIndicator color="#fff" size="small" />
+                ) : (
+                  <Ionicons name="add" size={24} color="#fff" />
+                )}
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.modalDivider} />
+
+            {userPlaylists.length === 0 ? (
+              <ThemedText style={styles.emptyModalText}>No existing playlists. Create one above!</ThemedText>
+            ) : (
+              <FlatList
+                data={userPlaylists}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={styles.modalPlaylistItem}
+                    onPress={() => handleSelectPlaylist(item.id)}
+                  >
+                    <Ionicons name="list" size={24} color="#007AFF" style={{ marginRight: 12 }} />
+                    <ThemedText style={styles.modalPlaylistTitle}>{item.title}</ThemedText>
+                  </TouchableOpacity>
+                )}
+              />
+            )}
+          </View>
+        </TouchableOpacity>
+      </Modal>
+
       {toastMessage && (
         <View style={styles.toastContainer}>
           <ThemedText style={styles.toastText}>{toastMessage}</ThemedText>
@@ -405,5 +558,69 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'flex-end',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    padding: 24,
+    maxHeight: '70%',
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  modalPlaylistItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
+  },
+  modalPlaylistTitle: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#000',
+  },
+  emptyModalText: {
+    textAlign: 'center',
+    color: '#888',
+    marginTop: 20,
+    marginBottom: 40,
+  },
+  modalCreateSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    marginBottom: 20,
+  },
+  modalInput: {
+    flex: 1,
+    height: 48,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    fontSize: 16,
+    color: '#000',
+  },
+  modalCreateButton: {
+    width: 48,
+    height: 48,
+    backgroundColor: '#007AFF',
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalDivider: {
+    height: 1,
+    backgroundColor: '#eee',
+    marginBottom: 10,
   },
 });

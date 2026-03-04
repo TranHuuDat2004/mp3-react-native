@@ -1,17 +1,18 @@
-import { Image } from 'expo-image';
-import { StyleSheet, TouchableOpacity, View, ScrollView, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useState, useMemo } from 'react';
+import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
+import React, { useMemo, useState } from 'react';
+import { FlatList, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 
+import musicData from '@/assets/data/music.json';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { AssetMap } from '@/constants/assets-map';
-import musicData from '@/assets/data/music.json';
 
 export default function LibraryScreen() {
-  const [activeFilter, setActiveFilter] = useState<'Playlists' | 'Artists' | 'Albums'>('Playlists');
+  const [activeFilter, setActiveFilter] = useState<'Recommended for you' | 'Artists' | 'All Songs'>('Recommended for you');
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
+  const [selectedArtistName, setSelectedArtistName] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
 
@@ -46,177 +47,194 @@ export default function LibraryScreen() {
     [categories, selectedCategoryId]
   );
 
-  const renderFilterChips = () => (
-    <View style={styles.filterSection}>
-      {(['Playlists', 'Artists', 'Albums'] as const).map(filter => (
-        <TouchableOpacity
-          key={filter}
-          style={activeFilter === filter ? styles.filterChipActive : styles.filterChip}
-          onPress={() => {
-            setActiveFilter(filter);
-            setSelectedCategoryId(null);
-          }}
-        >
-          <ThemedText style={activeFilter === filter ? styles.filterTextActive : styles.filterText}>
-            {filter}
-          </ThemedText>
-        </TouchableOpacity>
-      ))}
-    </View>
-  );
+  const renderHeader = () => {
+    return (
+      <>
+        <ThemedView style={styles.header}>
+          <ThemedText type="title">Your Library</ThemedText>
+          <View style={styles.headerIcons}>
+            <TouchableOpacity style={styles.iconButton}>
+              <Ionicons name="search" size={24} color="#000" />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.iconButton}>
+              <Ionicons name="add" size={30} color="#000" />
+            </TouchableOpacity>
+          </View>
+        </ThemedView>
 
-  const renderSearchContent = () => {
-    const query = searchQuery.toLowerCase();
-    const filteredSongs = allSongs.filter(song =>
-      song.title.toLowerCase().includes(query) ||
-      song.artistData.toLowerCase().includes(query)
+        <View style={styles.searchContainer}>
+          <Ionicons name="search" size={20} color="#888" style={styles.searchIcon} />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search songs, artists..."
+            placeholderTextColor="#888"
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
+          {searchQuery.length > 0 && (
+            <TouchableOpacity onPress={() => setSearchQuery('')}>
+              <Ionicons name="close-circle" size={20} color="#888" />
+            </TouchableOpacity>
+          )}
+        </View>
+
+        <View style={styles.filterSection}>
+          {(['Recommended for you', 'Artists', 'All Songs'] as const).map(filter => (
+            <TouchableOpacity
+              key={filter}
+              style={activeFilter === filter ? styles.filterChipActive : styles.filterChip}
+              onPress={() => {
+                setActiveFilter(filter);
+                setSelectedCategoryId(null);
+                setSelectedArtistName(null);
+              }}
+            >
+              <ThemedText style={activeFilter === filter ? styles.filterTextActive : styles.filterText}>
+                {filter}
+              </ThemedText>
+            </TouchableOpacity>
+          ))}
+        </View>
+        {renderSectionHeader()}
+      </>
     );
+  };
 
-    if (filteredSongs.length === 0) {
+  const renderSectionHeader = () => {
+    if (searchQuery.trim().length > 0) {
+      return <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>Search Results</ThemedText>;
+    }
+
+    if (selectedArtistName) {
       return (
-        <View style={styles.section}>
-          <ThemedText style={{ textAlign: 'center', color: '#888', marginTop: 20 }}>No results found for "{searchQuery}"</ThemedText>
+        <View style={styles.sectionHeaderContainer}>
+          <TouchableOpacity style={styles.backButton} onPress={() => setSelectedArtistName(null)}>
+            <Ionicons name="arrow-back" size={20} color="#007AFF" />
+            <ThemedText style={styles.backText}>Back to {activeFilter}</ThemedText>
+          </TouchableOpacity>
+          <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>{selectedArtistName}</ThemedText>
         </View>
       );
     }
 
-    return (
-      <View style={styles.section}>
-        <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>Search Results</ThemedText>
-        {filteredSongs.map((item: any, idx: number) => (
-          <TouchableOpacity
-            key={`${item.id}-${idx}`}
-            style={styles.libraryItem}
-            onPress={() => {
-              const songIdx = allSongs.findIndex((s: any) => s.id === item.id);
-              if (songIdx !== -1) {
-                router.push(`/?songIndex=${songIdx}`);
-              }
-            }}
-          >
-            <Image source={AssetMap[item.artUrl]} style={styles.libraryArt} />
-            <View style={styles.libraryItemInfo}>
-              <ThemedText type="defaultSemiBold" numberOfLines={1}>{item.title}</ThemedText>
-              <ThemedText style={styles.librarySubtitle}>{item.artistData} • {item.plays} plays</ThemedText>
-            </View>
-            <Ionicons name="play-circle" size={24} color="#007AFF" />
-          </TouchableOpacity>
-        ))}
-      </View>
-    );
-  };
-
-  const renderContent = () => {
-    if (searchQuery.trim().length > 0) {
-      return renderSearchContent();
-    }
-
     if (selectedCategoryId && activeCategory) {
       return (
-        <View style={styles.section}>
+        <View style={styles.sectionHeaderContainer}>
           <TouchableOpacity style={styles.backButton} onPress={() => setSelectedCategoryId(null)}>
             <Ionicons name="arrow-back" size={20} color="#007AFF" />
             <ThemedText style={styles.backText}>Back to {activeFilter}</ThemedText>
           </TouchableOpacity>
           <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>{activeCategory.title}</ThemedText>
-          {activeCategory.songs.map((item: any) => (
-            <TouchableOpacity
-              key={item.id}
-              style={styles.libraryItem}
-              onPress={() => {
-                const idx = allSongs.findIndex((s: any) => s.id === item.id);
-                if (idx !== -1) {
-                  router.push(`/?songIndex=${idx}`);
-                }
-              }}
-            >
-              <Image source={AssetMap[item.artUrl]} style={styles.libraryArt} />
-              <View style={styles.libraryItemInfo}>
-                <ThemedText type="defaultSemiBold" numberOfLines={1}>{item.title}</ThemedText>
-                <ThemedText style={styles.librarySubtitle}>{item.artistData} • {item.plays} plays</ThemedText>
-              </View>
-              <Ionicons name="play-circle" size={24} color="#007AFF" />
-            </TouchableOpacity>
-          ))}
         </View>
       );
     }
 
-    if (activeFilter === 'Playlists' || activeFilter === 'Albums') {
-      return (
-        <View style={styles.section}>
-          <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>
-            {activeFilter === 'Playlists' ? 'Your Playlists' : 'Albums'}
-          </ThemedText>
-          <View style={styles.grid}>
-            {categories.map((item) => (
-              <TouchableOpacity
-                key={item.id}
-                style={styles.gridItem}
-                onPress={() => setSelectedCategoryId(item.id)}
-              >
-                <Image source={AssetMap[item.art]} style={styles.gridArt} />
-                <ThemedText numberOfLines={1} style={styles.gridTitle}>{item.title}</ThemedText>
-                <ThemedText style={styles.gridSubtitle}>{item.count} songs</ThemedText>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-      );
+    if (activeFilter === 'Recommended for you' || activeFilter === 'All Songs' || activeFilter === 'Artists') {
+      return <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>{activeFilter === 'Recommended for you' ? 'Recommended for you' : activeFilter === 'All Songs' ? 'All Songs' : 'Artists'}</ThemedText>;
     }
 
-    if (activeFilter === 'Artists') {
-      return (
-        <View style={styles.section}>
-          <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>Artists</ThemedText>
-          {uniqueArtists.map((item: any, idx) => (
-            <TouchableOpacity key={idx} style={styles.libraryItem}>
-              <Image source={AssetMap[item.art]} style={[styles.libraryArt, { borderRadius: 32 }]} />
-              <View style={styles.libraryItemInfo}>
-                <ThemedText type="defaultSemiBold" numberOfLines={1}>{item.name}</ThemedText>
-                <ThemedText style={styles.librarySubtitle}>{item.count} songs in library</ThemedText>
-              </View>
-              <Ionicons name="chevron-forward" size={20} color="#ccc" />
-            </TouchableOpacity>
-          ))}
-        </View>
-      );
-    }
+    return null;
   };
 
-  return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <ThemedView style={styles.header}>
-        <ThemedText type="title">Your Library</ThemedText>
-        <View style={styles.headerIcons}>
-          <TouchableOpacity style={styles.iconButton}>
-            <Ionicons name="search" size={24} color="#000" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.iconButton}>
-            <Ionicons name="add" size={30} color="#000" />
-          </TouchableOpacity>
-        </View>
-      </ThemedView>
+  // Determine list data and layout based on state
+  let listData: any[] = [];
+  let numColumns = 1;
+  let renderItemFunc: ({ item }: { item: any }) => React.ReactElement | null;
 
-      <View style={styles.searchContainer}>
-        <Ionicons name="search" size={20} color="#888" style={styles.searchIcon} />
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search songs, artists..."
-          placeholderTextColor="#888"
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-        />
-        {searchQuery.length > 0 && (
-          <TouchableOpacity onPress={() => setSearchQuery('')}>
-            <Ionicons name="close-circle" size={20} color="#888" />
-          </TouchableOpacity>
-        )}
+  const renderSongItem = ({ item }: { item: any }) => (
+    <TouchableOpacity
+      style={styles.libraryItem}
+      onPress={() => {
+        const songIdx = allSongs.findIndex((s: any) => s.id === item.id);
+        if (songIdx !== -1) {
+          router.push(`/?songIndex=${songIdx}`);
+        }
+      }}
+    >
+      <Image source={AssetMap[item.artUrl]} style={styles.libraryArt} />
+      <View style={styles.libraryItemInfo}>
+        <ThemedText type="defaultSemiBold" numberOfLines={1}>{item.title}</ThemedText>
+        <ThemedText style={styles.librarySubtitle}>{item.artistData} • {item.plays} plays</ThemedText>
       </View>
+      <Ionicons name="play-circle" size={24} color="#007AFF" />
+    </TouchableOpacity>
+  );
 
-      {renderFilterChips()}
-      {renderContent()}
-    </ScrollView>
+  const renderCategoryItem = ({ item }: { item: any }) => (
+    <TouchableOpacity
+      style={styles.gridItem}
+      onPress={() => setSelectedCategoryId(item.id)}
+    >
+      <Image source={AssetMap[item.art]} style={styles.gridArt} />
+      <ThemedText numberOfLines={1} style={styles.gridTitle}>{item.title}</ThemedText>
+      <ThemedText style={styles.gridSubtitle}>{item.count} songs</ThemedText>
+    </TouchableOpacity>
+  );
+
+  const renderArtistItem = ({ item }: { item: any }) => (
+    <TouchableOpacity
+      style={styles.libraryItem}
+      onPress={() => setSelectedArtistName(item.name)}
+    >
+      <Image source={AssetMap[item.art]} style={[styles.libraryArt, { borderRadius: 32 }]} />
+      <View style={styles.libraryItemInfo}>
+        <ThemedText type="defaultSemiBold" numberOfLines={1}>{item.name}</ThemedText>
+        <ThemedText style={styles.librarySubtitle}>{item.count} songs in library</ThemedText>
+      </View>
+      <Ionicons name="chevron-forward" size={20} color="#ccc" />
+    </TouchableOpacity>
+  );
+
+  if (searchQuery.trim().length > 0) {
+    const query = searchQuery.toLowerCase();
+    listData = allSongs.filter(song =>
+      song.title.toLowerCase().includes(query) ||
+      song.artistData.toLowerCase().includes(query)
+    );
+    renderItemFunc = renderSongItem;
+  } else if (selectedArtistName) {
+    listData = allSongs.filter(song => song.artistData === selectedArtistName);
+    renderItemFunc = renderSongItem;
+  } else if (selectedCategoryId && activeCategory) {
+    listData = activeCategory.songs;
+    renderItemFunc = renderSongItem;
+  } else if (activeFilter === 'All Songs') {
+    listData = allSongs;
+    renderItemFunc = renderSongItem;
+  } else if (activeFilter === 'Artists') {
+    listData = uniqueArtists;
+    renderItemFunc = renderArtistItem;
+  } else if (activeFilter === 'Recommended for you') {
+    listData = categories;
+    numColumns = 2;
+    renderItemFunc = renderCategoryItem;
+  } else {
+    // Default fallback
+    renderItemFunc = renderSongItem;
+  }
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        key={numColumns} // Force re-render when switching between list and grid
+        data={listData}
+        keyExtractor={(item, idx) => item.id ? `${item.id}-${idx}` : `idx-${idx}`}
+        renderItem={renderItemFunc}
+        numColumns={numColumns}
+        columnWrapperStyle={numColumns === 2 ? styles.gridRow : undefined}
+        contentContainerStyle={styles.content}
+        ListHeaderComponent={renderHeader}
+        ListEmptyComponent={
+          <View style={styles.center}>
+            <ThemedText style={styles.emptyText}>No results found.</ThemedText>
+          </View>
+        }
+        removeClippedSubviews={true}
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
+        windowSize={5}
+      />
+    </View>
   );
 }
 
@@ -228,6 +246,7 @@ const styles = StyleSheet.create({
   content: {
     padding: 24,
     paddingTop: 60,
+    paddingBottom: 100, // Add padding to bottom for tab bar
   },
   header: {
     flexDirection: 'row',
@@ -287,17 +306,15 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: '600',
   },
-  section: {
-    marginBottom: 32,
+  sectionHeaderContainer: {
+    marginBottom: 8,
   },
   sectionTitle: {
     fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 20,
   },
-  grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+  gridRow: {
     justifyContent: 'space-between',
   },
   gridItem: {
@@ -347,4 +364,12 @@ const styles = StyleSheet.create({
     color: '#007AFF',
     fontSize: 16,
   },
+  center: {
+    paddingVertical: 40,
+    alignItems: 'center',
+  },
+  emptyText: {
+    color: '#888',
+    fontSize: 16,
+  }
 });
