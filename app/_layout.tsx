@@ -1,5 +1,8 @@
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack, useRouter, useSegments } from 'expo-router';
+import { useFonts } from 'expo-font';
+import { DrumstickIcon as Stack, useRouter, useSegments } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
@@ -13,12 +16,30 @@ export const unstable_settings = {
   initialRouteName: '(auth)',
 };
 
+// Prevent the splash screen from auto-hiding before asset loading is complete.
+SplashScreen.preventAutoHideAsync();
+
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [session, setSession] = useState<Session | null>(null);
   const [initialized, setInitialized] = useState(false);
   const segments = useSegments();
   const router = useRouter();
+
+  const [loaded, error] = useFonts({
+    ...Ionicons.font,
+    ...MaterialIcons.font,
+  });
+
+  useEffect(() => {
+    if (error) throw error;
+  }, [error]);
+
+  useEffect(() => {
+    if (loaded && initialized) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded, initialized]);
 
   useEffect(() => {
     // 1. Check initial session
@@ -50,9 +71,9 @@ export default function RootLayout() {
     }
   }, [session, initialized, segments]);
 
-  if (!initialized) {
+  if (!initialized || !loaded) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colorScheme === 'dark' ? '#000' : '#fff' }}>
         <ActivityIndicator size="large" color="#007AFF" />
       </View>
     );
